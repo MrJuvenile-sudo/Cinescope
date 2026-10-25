@@ -1,12 +1,12 @@
 import React, { useEffect } from 'react'
-import { useParams, Link, useNavigate } from 'react-router-dom'
-import { Film, Calendar, Clock, ArrowLeft, Clapperboard, Compass } from 'lucide-react'
+import { useParams, Link, useNavigate, useSearchParams } from 'react-router-dom'
+import { Film, Calendar, Clock, ArrowLeft, Clapperboard, Compass, Tv } from 'lucide-react'
 import { useDocumentTitle } from '../hooks/useDocumentTitle'
 import { useTmdbQuery } from '../hooks/useTmdbQuery'
-import { getMovieDetails } from '../services/movieService'
+import { getMovieDetails, getTvDetails } from '../services/movieService'
 import { MovieDetails as MovieDetailsType, TmdbError } from '../types/tmdb'
 import { getImageUrl } from '../utils/imageUrl'
-import { getYear, formatRuntime } from '../utils/movieHelpers'
+import { getYear, formatRuntime, getDisplayTitle } from '../utils/movieHelpers'
 import { buildDiscoverParams } from '../utils/discoverUrlState'
 import { LoadingSkeleton } from '../components/common/LoadingSkeleton'
 import { ErrorState } from '../components/common/ErrorState'
@@ -20,7 +20,9 @@ import { MovieRow } from '../components/movie/MovieRow'
 
 export const MovieDetails: React.FC = () => {
   const { movieId } = useParams<{ movieId: string }>()
+  const [searchParams] = useSearchParams()
   const navigate = useNavigate()
+  const isTv = searchParams.get('type') === 'tv'
 
   // Validate numeric ID: must be non-empty digits
   const isValidId = Boolean(movieId && /^\d+$/.test(movieId))
@@ -47,17 +49,19 @@ export const MovieDetails: React.FC = () => {
     error,
     retry,
   } = useTmdbQuery<MovieDetailsType>(
-    (signal) => getMovieDetails(movieId!, signal),
-    [movieId],
+    (signal) => (isTv ? getTvDetails(movieId!, signal) : getMovieDetails(movieId!, signal)),
+    [movieId, isTv],
     { enabled: isValidId }
   )
 
+  const titleText = getDisplayTitle(movie)
+
   useDocumentTitle(
-    movie?.title
-      ? `${movie.title} — CineScope`
+    titleText
+      ? `${titleText} — CineScope`
       : isValidId
-      ? 'Loading Movie... — CineScope'
-      : 'Movie Not Found — CineScope'
+      ? isTv ? 'Loading Series... — CineScope' : 'Loading Movie... — CineScope'
+      : 'Title Not Found — CineScope'
   )
 
   // 1. Invalid ID parameter guard
@@ -65,9 +69,9 @@ export const MovieDetails: React.FC = () => {
     return (
       <div className="max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-10 py-16 sm:py-24">
         <ErrorState
-          error={new TmdbError('not_found', 'Invalid movie identifier provided in the URL.')}
+          error={new TmdbError('not_found', 'Invalid identifier provided in the URL.')}
           title="Scene Not Found"
-          description="The requested movie identifier is not valid. Please select a valid title from the catalog."
+          description="The requested title identifier is not valid. Please select a valid title from the catalog."
         />
         <div className="mt-8 flex justify-center gap-3">
           <button
@@ -139,10 +143,15 @@ export const MovieDetails: React.FC = () => {
   // 4. Dossier Data Preparation
   const backdropUrl = getImageUrl(movie.backdrop_path, 'backdrop')
   const posterUrl = getImageUrl(movie.poster_path, 'poster_details')
-  const releaseYear = getYear(movie.release_date)
-  const runtimeFormatted = formatRuntime(movie.runtime)
+  const releaseYear = getYear(movie.release_date || movie.first_air_date)
+  const runtimeFormatted = isTv
+    ? movie.number_of_seasons
+      ? `${movie.number_of_seasons} Season${movie.number_of_seasons > 1 ? 's' : ''}${movie.number_of_episodes ? ` (${movie.number_of_episodes} eps)` : ''}`
+      : 'Series'
+    : formatRuntime(movie.runtime)
   const director = movie.credits?.crew?.find((person) => person.job === 'Director')
   const similarMovies = movie.similar?.results?.filter((m) => m.id !== movie.id) || []
+  const title = getDisplayTitle(movie)
 
   return (
     <article aria-labelledby="movie-details-title" className="space-y-12 sm:space-y-16 pb-16">
@@ -185,16 +194,16 @@ export const MovieDetails: React.FC = () => {
                 {posterUrl ? (
                   <img
                     src={posterUrl}
-                    alt={`${movie.title} theatrical poster`}
+                    alt={`${title} theatrical poster`}
                     loading="eager"
                     decoding="async"
                     className="w-full h-full object-cover"
                   />
                 ) : (
                   <div className="w-full h-full flex flex-col items-center justify-center p-6 text-center bg-gradient-to-b from-[var(--surface-2)] to-[var(--surface)] text-[var(--text-muted)]">
-                    <Film className="w-12 h-12 text-[var(--gold)]/70 mb-3" />
+                    {isTv ? <Tv className="w-12 h-12 text-[var(--gold)]/70 mb-3" /> : <Film className="w-12 h-12 text-[var(--gold)]/70 mb-3" />}
                     <span className="font-serif text-base font-semibold text-[var(--text)]">
-                      {movie.title}
+                      {title}
                     </span>
                     <span className="text-xs text-[var(--text-muted)] mt-1">
                       No Poster Available
@@ -214,15 +223,15 @@ export const MovieDetails: React.FC = () => {
               {/* Header Titles */}
               <div className="space-y-2">
                 <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.24em] text-[var(--gold)]">
-                  <Clapperboard className="w-3.5 h-3.5" />
-                  <span>Feature Presentation</span>
+                  {isTv ? <Tv className="w-3.5 h-3.5" /> : <Clapperboard className="w-3.5 h-3.5" />}
+                  <span>{isTv ? 'Television Series Dossier' : 'Feature Presentation'}</span>
                 </div>
 
                 <h1
                   id="movie-details-title"
                   className="font-serif text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight text-[var(--text)] leading-tight"
                 >
-                  {movie.title}
+                  {title}
                 </h1>
 
                 {movie.tagline && (
@@ -275,7 +284,7 @@ export const MovieDetails: React.FC = () => {
                         sort: 'popularity.desc',
                         page: '1',
                       }).toString()}`}
-                      title={`Discover more ${genre.name} films`}
+                      title={`Discover more ${genre.name} titles`}
                       className="inline-flex items-center justify-center px-3.5 py-1.5 text-xs sm:text-sm rounded-full border border-[var(--border)] bg-[var(--surface-2)] text-[var(--gold)] hover:border-[var(--gold)] hover:text-white transition-all duration-200 select-none"
                     >
                       {genre.name}
@@ -286,8 +295,8 @@ export const MovieDetails: React.FC = () => {
 
               {/* Action Buttons: Watch Now, Download & Watchlist */}
               <div className="flex flex-wrap items-center gap-3.5 pt-2">
-                <MovieWatchDownloadButtons movie={movie} />
-                <WatchlistButton movie={movie} variant="button" size="lg" />
+                <MovieWatchDownloadButtons movie={{ ...movie, title }} />
+                <WatchlistButton movie={{ ...movie, title }} variant="button" size="lg" />
               </div>
 
               {/* Synopsis / Overview */}
@@ -312,7 +321,7 @@ export const MovieDetails: React.FC = () => {
         {movie.images?.backdrops && movie.images.backdrops.length > 0 && (
           <MoviePicturesGallery
             images={movie.images.backdrops}
-            movieTitle={movie.title}
+            movieTitle={title}
           />
         )}
 

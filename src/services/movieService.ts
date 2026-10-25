@@ -202,3 +202,128 @@ export async function getGenres(
     return { genres: FALLBACK_GENRES }
   }
 }
+
+/**
+ * Fetches trending TV series (defaults to weekly window).
+ */
+export async function getTrendingTv(
+  timeWindow: 'day' | 'week' = 'week',
+  signal?: AbortSignal,
+  bypassCache = false
+): Promise<Paginated<Movie>> {
+  const data = await request<Paginated<Movie>>(
+    `/trending/tv/${timeWindow}`,
+    { language: 'en-US' },
+    signal,
+    bypassCache
+  )
+  return {
+    ...data,
+    results: (data.results || []).map((item) => ({
+      ...item,
+      title: item.name || item.title || 'Untitled Series',
+      release_date: item.first_air_date || item.release_date || null,
+      media_type: 'tv',
+    })),
+  }
+}
+
+/**
+ * Fetches popular TV series.
+ */
+export async function getPopularTv(
+  page = 1,
+  signal?: AbortSignal,
+  bypassCache = false
+): Promise<Paginated<Movie>> {
+  const data = await request<Paginated<Movie>>(
+    '/tv/popular',
+    { page, language: 'en-US' },
+    signal,
+    bypassCache
+  )
+  return {
+    ...data,
+    results: (data.results || []).map((item) => ({
+      ...item,
+      title: item.name || item.title || 'Untitled Series',
+      release_date: item.first_air_date || item.release_date || null,
+      media_type: 'tv',
+    })),
+  }
+}
+
+/**
+ * Fetches top rated TV series.
+ */
+export async function getTopRatedTv(
+  page = 1,
+  signal?: AbortSignal,
+  bypassCache = false
+): Promise<Paginated<Movie>> {
+  const data = await request<Paginated<Movie>>(
+    '/tv/top_rated',
+    { page, language: 'en-US' },
+    signal,
+    bypassCache
+  )
+  return {
+    ...data,
+    results: (data.results || []).map((item) => ({
+      ...item,
+      title: item.name || item.title || 'Untitled Series',
+      release_date: item.first_air_date || item.release_date || null,
+      media_type: 'tv',
+    })),
+  }
+}
+
+/**
+ * Fetches single TV series dossier with credits, videos, similar, and images.
+ */
+export async function getTvDetails(
+  tvId: string | number,
+  signal?: AbortSignal,
+  bypassCache = false
+): Promise<MovieDetails> {
+  const data = await request<MovieDetails>(
+    `/tv/${tvId}`,
+    {
+      append_to_response: 'credits,videos,similar,images',
+      language: 'en-US',
+      include_image_language: 'en,null',
+    },
+    signal,
+    bypassCache
+  )
+  return {
+    ...data,
+    title: data.name || data.title || 'Untitled Series',
+    release_date: data.first_air_date || data.release_date || null,
+    runtime: data.episode_run_time?.[0] || null,
+    media_type: 'tv',
+  }
+}
+
+/**
+ * Fetches movies by category/genre ID (e.g. Action, Comedy, Horror, Sci-Fi).
+ */
+export async function getMoviesByGenre(
+  genreId: string | number,
+  page = 1,
+  signal?: AbortSignal,
+  bypassCache = false
+): Promise<Paginated<Movie>> {
+  return request<Paginated<Movie>>(
+    '/discover/movie',
+    {
+      with_genres: genreId,
+      sort_by: 'popularity.desc',
+      page,
+      language: 'en-US',
+      include_adult: false,
+    },
+    signal,
+    bypassCache
+  )
+}

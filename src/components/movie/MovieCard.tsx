@@ -1,9 +1,9 @@
 import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
-import { Film } from 'lucide-react'
+import { Film, Tv } from 'lucide-react'
 import { Movie, WatchlistItem } from '../../types/tmdb'
 import { getImageUrl } from '../../utils/imageUrl'
-import { getYear } from '../../utils/movieHelpers'
+import { getYear, getDisplayTitle } from '../../utils/movieHelpers'
 import { Rating } from '../common/Rating'
 import { WatchlistButton } from './WatchlistButton'
 
@@ -17,11 +17,14 @@ export const MovieCard: React.FC<MovieCardProps> = ({ movie, priority = false })
   const [imageLoaded, setImageLoaded] = useState(false)
   const posterUrl = getImageUrl(movie.poster_path, 'poster_card')
   const year = getYear(movie.release_date)
+  const displayTitle = getDisplayTitle(movie)
+  const isTv = 'media_type' in movie && movie.media_type === 'tv'
+  const detailLink = `/movie/${movie.id}${isTv ? '?type=tv' : ''}`
 
   return (
     <div className="group relative flex flex-col h-full select-none">
       <Link
-        to={`/movie/${movie.id}`}
+        to={detailLink}
         className="relative block w-full aspect-[2/3] rounded-2xl overflow-hidden bg-[var(--surface-2)] border border-[var(--border)] card-hover group-hover:border-[var(--border-strong)] group-hover:ring-1 group-hover:ring-[var(--primary)]/25 focus-visible:outline-2 focus-visible:outline-[var(--primary)] focus-visible:outline-offset-4"
       >
         {/* Shimmer placeholder while loading */}
@@ -33,7 +36,7 @@ export const MovieCard: React.FC<MovieCardProps> = ({ movie, priority = false })
         {posterUrl && !imageError ? (
           <img
             src={posterUrl}
-            alt={`${movie.title} poster`}
+            alt={`${displayTitle} poster`}
             loading={priority ? 'eager' : 'lazy'}
             decoding="async"
             onError={() => setImageError(true)}
@@ -43,23 +46,28 @@ export const MovieCard: React.FC<MovieCardProps> = ({ movie, priority = false })
         ) : (
           <div className="w-full h-full flex flex-col items-center justify-center p-4 text-center bg-gradient-to-b from-[var(--surface-2)] to-[var(--surface)] text-[var(--text-muted)]">
             <div className="w-14 h-14 rounded-full bg-[var(--surface)] border border-[var(--border)] flex items-center justify-center mb-3 shadow-inner animate-float">
-              <Film className="w-7 h-7 text-[var(--gold)]/70" />
+              {isTv ? <Tv className="w-7 h-7 text-[var(--gold)]/70" /> : <Film className="w-7 h-7 text-[var(--gold)]/70" />}
             </div>
             <span className="font-serif text-xs font-medium text-[var(--text)] line-clamp-2">
-              {movie.title}
+              {displayTitle}
             </span>
             <span className="text-[10px] text-[var(--text-muted)] mt-1">No Poster</span>
           </div>
         )}
 
-        {/* Top-left: Glass Rating Pill */}
-        <div className="absolute top-2.5 left-2.5 z-10 pointer-events-none">
+        {/* Top-left: Glass Rating Pill & TV tag */}
+        <div className="absolute top-2.5 left-2.5 z-10 pointer-events-none flex items-center gap-1.5">
           <Rating voteAverage={movie.vote_average} variant="pill" size="sm" />
+          {isTv && (
+            <span className="px-1.5 py-0.5 rounded-md bg-[rgba(20,20,26,0.85)] border border-[var(--border-strong)] text-[10px] font-bold uppercase tracking-wider text-[var(--gold)] shadow-sm backdrop-blur-md">
+              SERIES
+            </span>
+          )}
         </div>
 
         {/* Top-right: Circular Glass Watchlist Button — visible on hover */}
         <div className="absolute top-2.5 right-2.5 z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
-          <WatchlistButton movie={movie} size="sm" />
+          <WatchlistButton movie={{ ...movie, title: displayTitle }} size="sm" />
         </div>
 
         {/* Hover Bottom Shadow Gradient */}
@@ -69,10 +77,10 @@ export const MovieCard: React.FC<MovieCardProps> = ({ movie, priority = false })
       {/* Meta details always visible below card */}
       <div className="pt-2.5 px-0.5 space-y-1">
         <Link
-          to={`/movie/${movie.id}`}
+          to={detailLink}
           className="font-serif text-sm sm:text-base font-semibold text-[var(--text)] leading-snug line-clamp-2 hover:text-[var(--gold)] transition-colors duration-150"
         >
-          {movie.title}
+          {displayTitle}
         </Link>
         <div className="flex items-center justify-between text-xs text-[var(--text-muted)]">
           <span>{year}</span>

@@ -11,10 +11,12 @@ export interface Genre {
 export interface Movie {
   id: number
   title: string
+  name?: string // TV shows return 'name' instead of 'title'
   poster_path: string | null
   backdrop_path: string | null
   overview: string | null
   release_date: string | null
+  first_air_date?: string | null // TV shows use 'first_air_date'
   vote_average: number
   vote_count: number
   popularity: number
@@ -23,7 +25,9 @@ export interface Movie {
   adult?: boolean
   original_language?: string
   original_title?: string
+  original_name?: string
   video?: boolean
+  media_type?: 'movie' | 'tv'
 }
 
 export interface CastMember {
@@ -69,6 +73,9 @@ export interface ImageItem {
 export interface MovieDetails extends Movie {
   tagline: string | null
   runtime: number | null
+  episode_run_time?: number[] // TV shows
+  number_of_seasons?: number
+  number_of_episodes?: number
   status?: string
   budget?: number
   revenue?: number

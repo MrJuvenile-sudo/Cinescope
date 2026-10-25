@@ -1,9 +1,16 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
-import { Bookmark, Compass, Flame } from 'lucide-react'
+import { Bookmark, Compass } from 'lucide-react'
 import { useDocumentTitle } from '../hooks/useDocumentTitle'
 import { useTmdbQuery } from '../hooks/useTmdbQuery'
-import { getTrending, getPopular, getTopRated } from '../services/movieService'
+import {
+  getTrending,
+  getPopular,
+  getTopRated,
+  getTrendingTv,
+  getMoviesByGenre,
+  getMidMovies,
+} from '../services/movieService'
 import { useWatchlist } from '../context/WatchlistContext'
 import { buildDiscoverParams } from '../utils/discoverUrlState'
 import { MovieHero } from '../components/movie/MovieHero'
@@ -18,7 +25,7 @@ const GENRE_SHORTCUTS = [
   { id: '28', name: 'Action', emoji: '⚡' },
   { id: '35', name: 'Comedy', emoji: '😂' },
   { id: '18', name: 'Drama', emoji: '🎭' },
-  { id: '878', name: 'Science Fiction', emoji: '🚀' },
+  { id: '878', name: 'Sci-Fi', emoji: '🚀' },
   { id: '53', name: 'Thriller', emoji: '🔪' },
   { id: '12', name: 'Adventure', emoji: '🗺️' },
   { id: '16', name: 'Animation', emoji: '✨' },
@@ -30,7 +37,7 @@ export const Home: React.FC = () => {
   useDocumentTitle('Premiere — Midnight Cinema Discovery')
   const { items: watchlistItems } = useWatchlist()
 
-  // 1. Trending movies query (powers Hero and Trending Row)
+  // 1. Trending movies query (powers Hero carousel & Trending Row)
   const {
     data: trendingData,
     loading: trendingLoading,
@@ -46,7 +53,39 @@ export const Home: React.FC = () => {
     retry: retryPopular,
   } = useTmdbQuery((signal, isRetry) => getPopular(1, signal, isRetry), [])
 
-  // 3. Top Rated movies query
+  // 3. Trending TV Series query
+  const {
+    data: tvData,
+    loading: tvLoading,
+    error: tvError,
+    retry: retryTv,
+  } = useTmdbQuery((signal, isRetry) => getTrendingTv('week', signal, isRetry), [])
+
+  // 4. Action & Adventure category query (Genre 28)
+  const {
+    data: actionData,
+    loading: actionLoading,
+    error: actionError,
+    retry: retryAction,
+  } = useTmdbQuery((signal, isRetry) => getMoviesByGenre('28', 1, signal, isRetry), [])
+
+  // 5. Sci-Fi & Fantasy category query (Genre 878)
+  const {
+    data: sciFiData,
+    loading: sciFiLoading,
+    error: sciFiError,
+    retry: retrySciFi,
+  } = useTmdbQuery((signal, isRetry) => getMoviesByGenre('878', 1, signal, isRetry), [])
+
+  // 6. Horror & Dark Thrillers category query (Genre 27)
+  const {
+    data: horrorData,
+    loading: horrorLoading,
+    error: horrorError,
+    retry: retryHorror,
+  } = useTmdbQuery((signal, isRetry) => getMoviesByGenre('27', 1, signal, isRetry), [])
+
+  // 7. Top Rated Masterpieces
   const {
     data: topRatedData,
     loading: topRatedLoading,
@@ -54,31 +93,41 @@ export const Home: React.FC = () => {
     retry: retryTopRated,
   } = useTmdbQuery((signal, isRetry) => getTopRated(1, signal, isRetry), [])
 
-  // First trending movie with backdrop for hero
-  const featuredMovie =
-    trendingData?.results?.find((m) => m.backdrop_path || m.poster_path) ||
-    trendingData?.results?.[0] ||
-    null
+  // 8. MID 18+ Category Reel
+  const {
+    data: midData,
+    loading: midLoading,
+    error: midError,
+    retry: retryMid,
+  } = useTmdbQuery((signal, isRetry) => getMidMovies(1, 'all', 'popularity.desc', signal, isRetry), [])
 
-  // Trending row items (slice after hero if available, or full list)
+  // Movies for Hero Carousel (first 8 trending films)
+  const heroMovies = trendingData?.results || []
+
+  // Row movies
   const trendingRowMovies = trendingData?.results || []
   const popularRowMovies = popularData?.results || []
+  const tvRowMovies = tvData?.results || []
+  const actionRowMovies = actionData?.results || []
+  const sciFiRowMovies = sciFiData?.results || []
+  const horrorRowMovies = horrorData?.results || []
   const topRatedRowMovies = topRatedData?.results || []
+  const midRowMovies = midData?.results || []
 
   // Recent 6 watchlist items
   const recentWatchlist = watchlistItems.slice(0, 6)
 
   return (
     <div className="max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-10 py-6 sm:py-10 space-y-12 sm:space-y-16">
-      {/* Cinematic Hero */}
+      {/* Dynamic Multi-Movie Hero Carousel */}
       <MovieHero
-        movie={featuredMovie}
+        movies={heroMovies}
         loading={trendingLoading}
         error={trendingError}
         onRetry={retryTrending}
       />
 
-      {/* Genre Shortcut Chips */}
+      {/* Genre & Category Quick Launch Chips */}
       <section aria-label="Genre Shortcuts" className="space-y-4">
         <div>
           <span className="text-xs font-semibold uppercase tracking-[0.24em] text-[var(--gold)]">
@@ -121,10 +170,10 @@ export const Home: React.FC = () => {
 
       <Divider />
 
-      {/* Row 1: Trending This Week */}
+      {/* Section 1: Trending Movies This Week */}
       <MovieRow
         eyebrow="Global Momentum"
-        title="Trending This Week"
+        title="Trending Movies This Week"
         subtitle="The motion pictures capturing audience attention around the globe right now."
         viewAllHref="/discover?sort=popularity.desc"
         movies={trendingRowMovies}
@@ -135,10 +184,23 @@ export const Home: React.FC = () => {
 
       <Divider />
 
-      {/* Row 2: Popular Now */}
+      {/* Section 2: Top TV & Web Series Spotlight */}
+      <MovieRow
+        eyebrow="Binge-Worthy TV & Web Series"
+        title="Trending Television Series"
+        subtitle="Critically acclaimed drama, mystery, and streaming episodic series making waves."
+        movies={tvRowMovies}
+        loading={tvLoading}
+        error={tvError}
+        onRetry={retryTv}
+      />
+
+      <Divider />
+
+      {/* Section 3: Popular Movies */}
       <MovieRow
         eyebrow="Box Office & Buzz"
-        title="Popular Now"
+        title="Popular Right Now"
         subtitle="Currently high in theatrical circulation and active streaming discussions."
         viewAllHref="/discover?sort=popularity.desc"
         movies={popularRowMovies}
@@ -149,11 +211,53 @@ export const Home: React.FC = () => {
 
       <Divider />
 
-      {/* Row 3: Top Rated Classics */}
+      {/* Section 4: Action & High Adrenaline */}
+      <MovieRow
+        eyebrow="Adrenaline & Martial Arts"
+        title="Action Blockbusters"
+        subtitle="Explosive spectacles, fast-paced chases, and thrilling combat choreography."
+        viewAllHref={`/discover?${buildDiscoverParams({ genre: '28', year: 'any', rating: 'any', sort: 'popularity.desc', page: '1' }).toString()}`}
+        movies={actionRowMovies}
+        loading={actionLoading}
+        error={actionError}
+        onRetry={retryAction}
+      />
+
+      <Divider />
+
+      {/* Section 5: Sci-Fi & Futuristic Realities */}
+      <MovieRow
+        eyebrow="Speculative Worlds & Cyberpunk"
+        title="Sci-Fi & Futuristic Realities"
+        subtitle="Mind-bending space voyages, quantum physics, and dystopian future visions."
+        viewAllHref={`/discover?${buildDiscoverParams({ genre: '878', year: 'any', rating: 'any', sort: 'popularity.desc', page: '1' }).toString()}`}
+        movies={sciFiRowMovies}
+        loading={sciFiLoading}
+        error={sciFiError}
+        onRetry={retrySciFi}
+      />
+
+      <Divider />
+
+      {/* Section 6: Horror & Midnight Nightmares */}
+      <MovieRow
+        eyebrow="Supernatural & Psychological Horror"
+        title="Horror & Midnight Chills"
+        subtitle="Paranormal haunts, visceral tension, and dread engineered for midnight viewing."
+        viewAllHref={`/discover?${buildDiscoverParams({ genre: '27', year: 'any', rating: 'any', sort: 'popularity.desc', page: '1' }).toString()}`}
+        movies={horrorRowMovies}
+        loading={horrorLoading}
+        error={horrorError}
+        onRetry={retryHorror}
+      />
+
+      <Divider />
+
+      {/* Section 7: Top Rated Masterpieces */}
       <MovieRow
         eyebrow="Critical Acclaim"
-        title="Top Rated Classics"
-        subtitle="The highest-rated cinematic masterpieces of all time evaluated by film enthusiasts."
+        title="Top Rated Masterpieces"
+        subtitle="The highest-rated cinematic triumphs evaluated by global film critics."
         viewAllHref="/discover?sort=vote_average.desc"
         movies={topRatedRowMovies}
         loading={topRatedLoading}
@@ -163,27 +267,17 @@ export const Home: React.FC = () => {
 
       <Divider />
 
-      {/* MID 18+ Cinema Spotlight Banner */}
-      <section aria-label="MID 18+ Cinema Spotlight" className="relative rounded-3xl overflow-hidden border border-[var(--primary)]/30 bg-gradient-to-r from-[rgba(229,9,20,0.16)] via-[rgba(20,20,26,0.95)] to-[rgba(10,10,13,0.95)] p-6 sm:p-10 shadow-2xl">
-        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6 relative z-10">
-          <div className="space-y-2 max-w-xl">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[var(--primary)] text-white text-xs font-bold uppercase tracking-widest shadow-[var(--shadow-glow-red)]">
-              <span>🔞 18+ Adult Cinema</span>
-            </div>
-            <h3 className="font-serif text-2xl sm:text-3xl font-bold text-white">
-              Step Into the MID Vault
-            </h3>
-            <p className="text-sm text-[var(--text-muted)] leading-relaxed">
-              Explore uncut, provocative R-rated and NC-17 films, psychological thrillers, and dark mature productions curated for adult audiences.
-            </p>
-          </div>
-          <Link to="/mid" className="shrink-0">
-            <Button size="lg" icon={<Flame className="w-4 h-4 text-white" />}>
-              Explore MID (18+)
-            </Button>
-          </Link>
-        </div>
-      </section>
+      {/* Section 8: MID 18+ Uncut Category Row */}
+      <MovieRow
+        eyebrow="🔞 18+ Mature Cinema Vault"
+        title="MID 18+ Erotic & Mature Cinema"
+        subtitle="Provocative, sensual, and uncut adult cinema curated strictly for mature audiences."
+        viewAllHref="/mid"
+        movies={midRowMovies}
+        loading={midLoading}
+        error={midError}
+        onRetry={retryMid}
+      />
 
       <Divider />
 
@@ -192,7 +286,7 @@ export const Home: React.FC = () => {
         <SectionHeading
           eyebrow="Personal Vault"
           title={`Your Watchlist · ${watchlistItems.length} Saved`}
-          subtitle="Quick access to movies queued for your next screening."
+          subtitle="Quick access to movies and series queued for your next screening."
           viewAllHref="/watchlist"
           viewAllLabel="Open Watchlist Vault"
         />
@@ -213,13 +307,13 @@ export const Home: React.FC = () => {
                 Your Watchlist is Empty
               </h3>
               <p className="text-sm text-[var(--text-muted)] mt-1 leading-relaxed">
-                Bookmark films across Trending reels or Discover to keep your upcoming screenings organized.
+                Bookmark films across Trending reels, Series, or Discover to keep your upcoming screenings organized.
               </p>
             </div>
             <div className="pt-2">
               <Link to="/discover">
                 <Button size="md" icon={<Compass className="w-4 h-4" />}>
-                  Discover Movies
+                  Discover Titles
                 </Button>
               </Link>
             </div>

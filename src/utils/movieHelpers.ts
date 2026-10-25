@@ -1,7 +1,7 @@
 import { Video } from '../types/tmdb'
 
 /**
- * Extracts a clean 4-digit year from release_date string.
+ * Extracts a clean 4-digit year from release_date or first_air_date string.
  * Returns 'TBA' if missing or unparseable.
  */
 export function getYear(releaseDate?: string | null): string {
@@ -11,6 +11,14 @@ export function getYear(releaseDate?: string | null): string {
 
   const match = releaseDate.match(/^(\d{4})/)
   return match ? match[1] : 'TBA'
+}
+
+/**
+ * Returns clean display title for either a movie (title) or TV series (name).
+ */
+export function getDisplayTitle(item?: { title?: string; name?: string } | null): string {
+  if (!item) return ''
+  return item.title || item.name || 'Untitled'
 }
 
 /**

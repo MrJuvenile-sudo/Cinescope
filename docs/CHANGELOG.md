@@ -171,13 +171,21 @@ Format: ## YYYY-MM-DD — Phase N — title / Files changed / What was built / H
   - `npm run build` passed (production bundle compiled cleanly).
   - Live TMDB queries verified via proxy returning 20 live 18+ titles and over 100 scene pictures for movie titles.
 
-## 2026-10-25 — Single-Page History Back Navigation
+## 2026-10-25 — Multi-Category Rows, TV Series Integration & Hero Carousel
 - Files changed:
-  - `src/pages/MovieDetails.tsx`: Replaced hardcoded `/discover` navigation with smart `handleBack` executing `navigate(-1)` across loading, loaded, and invalid ID states.
-  - `src/pages/MovieDetails.test.tsx`: Added unit test verifying back button execution.
+  - `src/types/tmdb.ts`: Added `name`, `first_air_date`, `original_name`, `media_type`, `number_of_seasons`, `number_of_episodes`, and `episode_run_time` to support TV series seamlessly.
+  - `src/services/movieService.ts`: Added `getTrendingTv`, `getPopularTv`, `getTopRatedTv`, `getTvDetails`, and `getMoviesByGenre`.
+  - `src/utils/movieHelpers.ts`: Added `getDisplayTitle` utility to handle movie titles and series names uniformly.
+  - `src/components/movie/MovieHero.tsx`: Upgraded hero to a dynamic multi-movie carousel with auto-rotation (6s interval), pause on hover, slide indicators, and previous/next controls.
+  - `src/components/movie/MovieCard.tsx`: Added SERIES badge tag support and automatic URL routing (`/movie/:id?type=tv`).
+  - `src/pages/MovieDetails.tsx`: Added full support for TV series dossiers (seasons, episodes, television presentation, TV backdrop/poster).
+  - `src/pages/Home.tsx`: Replaced static spotlight banner with rich category sections: Trending Movies, Trending Television Series, Popular Movies, Action Blockbusters, Sci-Fi & Futuristic Realities, Horror & Midnight Chills, Top Rated Masterpieces, and MID 18+ Cinema Reel.
 - What was built:
-  - When clicking "← Back" on any movie page, the user is navigated back exactly one single screen page in their session history (whether they came from Home, Discover with filters, Search results, MID 18+, or Watchlist), with full filter and scroll state intact without resetting categories.
+  - Multi-movie auto-advancing Hero carousel.
+  - Full TMDB TV/Web series discovery and dossier support.
+  - Distinct category rows across action, sci-fi, horror, top-rated, series, and 18+ adult cinema.
 - How verified:
   - `npm run typecheck` passed (0 errors).
-  - `npm test` passed (all 92 tests passing).
+  - `npm run lint` passed (0 warnings/errors).
+  - `npm test` passed (all 92 unit tests passing).
   - `npm run build` passed.
