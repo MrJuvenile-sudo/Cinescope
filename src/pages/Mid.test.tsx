@@ -54,12 +54,12 @@ describe('MID 18+ Page', () => {
       </WatchlistProvider>
     )
 
-    // Verify 18+ advisory banner
-    expect(screen.getByText(/18\+ Mature Audience Advisory/i)).toBeInTheDocument()
-    expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent(/MID/i)
-    expect(screen.getByText('All 18+ (Erotic & Sexual)')).toBeInTheDocument()
-    expect(screen.getByText('18+ Nude & Sensual')).toBeInTheDocument()
-    expect(screen.getByText('18+ Sexual & Erotica')).toBeInTheDocument()
+    // Verify mature audience banner
+    expect(screen.getByText(/Mature Audience Guidance/i)).toBeInTheDocument()
+    expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent(/Midnight/i)
+    expect(screen.getByText('All Titles')).toBeInTheDocument()
+    expect(screen.getByText('Sensual & Romance')).toBeInTheDocument()
+    expect(screen.getByText('Erotica & Passion')).toBeInTheDocument()
 
     // Verify movies loaded
     await waitFor(() => {
@@ -85,8 +85,8 @@ describe('MID 18+ Page', () => {
       expect(screen.getByText('Midnight Sinners')).toBeInTheDocument()
     })
 
-    // Click on 18+ Nude & Sensual chip
-    const nudeChip = screen.getByText('18+ Nude & Sensual')
+    // Click on Sensual & Romance chip
+    const nudeChip = screen.getByText('Sensual & Romance')
     fireEvent.click(nudeChip)
 
     await waitFor(() => {

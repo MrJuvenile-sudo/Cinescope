@@ -30,7 +30,7 @@ const GENRE_SHORTCUTS = [
   { id: '12', name: 'Adventure', emoji: '🗺️' },
   { id: '16', name: 'Animation', emoji: '✨' },
   { id: '27', name: 'Horror', emoji: '👻' },
-  { id: 'mid', name: 'MID (18+)', emoji: '🔞', isMid: true },
+  { id: 'mid', name: 'Midnight', emoji: '🌙', isMid: true },
 ]
 
 export const Home: React.FC = () => {
@@ -152,14 +152,7 @@ export const Home: React.FC = () => {
 
             return (
               <Link key={genre.id} to={href} className={`animate-fade-up stagger-${Math.min(idx + 1, 6)}`}>
-                <Chip
-                  icon={<span aria-hidden="true">{genre.emoji}</span>}
-                  className={
-                    genre.isMid
-                      ? 'border-[var(--primary)] text-white font-semibold bg-[rgba(229,9,20,0.18)] shadow-[var(--shadow-glow-red)] hover:bg-[rgba(229,9,20,0.28)] ring-1 ring-[var(--primary)]/50'
-                      : ''
-                  }
-                >
+                <Chip icon={<span aria-hidden="true">{genre.emoji}</span>}>
                   {genre.name}
                 </Chip>
               </Link>
@@ -267,11 +260,11 @@ export const Home: React.FC = () => {
 
       <Divider />
 
-      {/* Section 8: MID 18+ Uncut Category Row */}
+      {/* Section 8: Midnight Cinema Category Row */}
       <MovieRow
-        eyebrow="🔞 18+ Mature Cinema Vault"
-        title="MID 18+ Erotic & Mature Cinema"
-        subtitle="Provocative, sensual, and uncut adult cinema curated strictly for mature audiences."
+        eyebrow="Late-Night Cinema Vault"
+        title="Midnight Cult & Mature Cinema"
+        subtitle="Provocative narratives, psychological thrillers, and uncut cinema curated for late-night viewing."
         viewAllHref="/mid"
         movies={midRowMovies}
         loading={midLoading}

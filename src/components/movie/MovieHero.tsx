@@ -215,17 +215,17 @@ export const MovieHero: React.FC<MovieHeroProps> = ({
         )}
 
         {/* Action Pair & Watchlist */}
-        <div className="flex flex-wrap items-center gap-3.5 pt-2">
+        <div className="flex flex-wrap items-center gap-2.5 sm:gap-3.5 pt-2">
           <Link to={detailLink}>
-            <Button size="lg" icon={<Play className="w-4 h-4 fill-current" />}>
+            <Button size="md" className="sm:!h-12 sm:!px-6" icon={<Play className="w-4 h-4 fill-current" />}>
               View Details
             </Button>
           </Link>
 
-          <WatchlistButton movie={{ ...activeMovie, title: displayTitle }} variant="button" size="lg" />
+          <WatchlistButton movie={{ ...activeMovie, title: displayTitle }} variant="button" size="md" />
 
-          <Link to="/discover">
-            <Button variant="secondary" size="lg" icon={<Compass className="w-4 h-4" />}>
+          <Link to="/discover" className="hidden sm:inline-block">
+            <Button variant="secondary" size="md" className="sm:!h-12 sm:!px-6" icon={<Compass className="w-4 h-4" />}>
               Explore Discover
             </Button>
           </Link>
@@ -235,8 +235,8 @@ export const MovieHero: React.FC<MovieHeroProps> = ({
       {/* Carousel Controls: Arrows and Indicators */}
       {heroList.length > 1 && (
         <>
-          {/* Navigation Arrows */}
-          <div className="absolute bottom-6 right-6 z-20 flex items-center gap-2">
+          {/* Navigation Arrows - Desktop/Tablet */}
+          <div className="absolute bottom-6 right-6 z-20 hidden sm:flex items-center gap-2">
             <button
               type="button"
               onClick={handlePrev}
@@ -255,8 +255,8 @@ export const MovieHero: React.FC<MovieHeroProps> = ({
             </button>
           </div>
 
-          {/* Carousel dots */}
-          <div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-20 flex items-center gap-2">
+          {/* Carousel dots - Mobile & Desktop */}
+          <div className="absolute top-4 right-4 sm:top-auto sm:bottom-6 sm:left-1/2 sm:-translate-x-1/2 z-20 flex items-center gap-1.5 sm:gap-2 bg-black/40 sm:bg-transparent px-2.5 py-1 sm:p-0 rounded-full backdrop-blur-sm sm:backdrop-blur-none">
             {heroList.map((m, idx) => (
               <button
                 key={m.id}
@@ -265,8 +265,8 @@ export const MovieHero: React.FC<MovieHeroProps> = ({
                 aria-label={`Go to slide ${idx + 1}: ${getDisplayTitle(m)}`}
                 className={`transition-all duration-300 rounded-full cursor-pointer ${
                   idx === currentIndex
-                    ? 'w-7 h-2 bg-[var(--primary)] shadow-[var(--shadow-glow-red)]'
-                    : 'w-2 h-2 bg-white/40 hover:bg-white/80'
+                    ? 'w-5 sm:w-7 h-1.5 sm:h-2 bg-[var(--primary)] shadow-[var(--shadow-glow-red)]'
+                    : 'w-1.5 sm:w-2 h-1.5 sm:h-2 bg-white/40 hover:bg-white/80'
                 }`}
               />
             ))}

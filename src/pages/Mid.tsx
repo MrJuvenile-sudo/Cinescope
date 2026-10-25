@@ -12,12 +12,12 @@ import { Chip } from '../components/common/Chip'
 
 type MidSubCategory = 'all' | 'nude' | 'sexual' | 'thriller' | 'explicit'
 
-const SUB_CATEGORIES: { id: MidSubCategory; label: string; emoji: string }[] = [
-  { id: 'all', label: 'All 18+ (Erotic & Sexual)', emoji: '🔥' },
-  { id: 'nude', label: '18+ Nude & Sensual', emoji: '🔞' },
-  { id: 'sexual', label: '18+ Sexual & Erotica', emoji: '💋' },
-  { id: 'thriller', label: '18+ Erotic Thrillers', emoji: '🔪' },
-  { id: 'explicit', label: 'NC-17 Uncut', emoji: '🚫' },
+const SUB_CATEGORIES: { id: MidSubCategory; label: string }[] = [
+  { id: 'all', label: 'All Titles' },
+  { id: 'nude', label: 'Sensual & Romance' },
+  { id: 'sexual', label: 'Erotica & Passion' },
+  { id: 'thriller', label: 'Erotic Thrillers' },
+  { id: 'explicit', label: 'NC-17 Uncut' },
 ]
 
 const SORT_OPTIONS = [
@@ -54,27 +54,20 @@ export const Mid: React.FC = () => {
 
   return (
     <div className="max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-10 py-8 sm:py-12 space-y-10">
-      {/* 18+ Advisory Banner */}
-      <div className="relative rounded-3xl overflow-hidden border border-[var(--primary)]/30 bg-gradient-to-r from-[rgba(229,9,20,0.14)] via-[rgba(16,16,21,0.9)] to-[rgba(10,10,13,0.9)] p-6 sm:p-8 shadow-2xl">
+      {/* Mature Cinema Header */}
+      <div className="relative rounded-3xl overflow-hidden border border-[var(--border)] bg-gradient-to-r from-[rgba(20,20,26,0.95)] via-[rgba(16,16,21,0.9)] to-[rgba(10,10,13,0.9)] p-6 sm:p-8 shadow-2xl">
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6 relative z-10">
           <div className="space-y-2 max-w-2xl">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[var(--primary)] text-white text-xs font-bold uppercase tracking-widest shadow-[var(--shadow-glow-red)]">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[var(--surface-2)] border border-[var(--border)] text-[var(--gold)] text-xs font-semibold uppercase tracking-widest">
               <ShieldAlert className="w-3.5 h-3.5" />
-              <span>18+ Mature Audience Advisory</span>
+              <span>Mature Audience Guidance (18+)</span>
             </div>
             <h1 className="font-serif text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight text-white leading-tight">
-              MID <span className="text-[var(--primary)]">18+ Erotic Cinema</span>
+              Midnight <span className="text-[var(--gold)]">Cinema</span>
             </h1>
             <p className="text-sm sm:text-base text-[var(--text-muted)] leading-relaxed">
-              Curated 18+ adult cinema, erotic narratives, nude and sensual art, sexually explicit films, and uncut R/NC-17 productions from international cinema.
+              Curated adult cinema, provocative narratives, sensual romance, psychological thrillers, and uncut R and NC-17 productions from international cinema.
             </p>
-          </div>
-
-          <div className="flex items-center gap-2 p-3 rounded-2xl bg-[var(--surface-2)] border border-[var(--border)] shrink-0 select-none">
-            <Flame className="w-5 h-5 text-[var(--primary)] animate-pulse" />
-            <span className="text-xs font-semibold uppercase tracking-wider text-[var(--gold)]">
-              18+ Erotic & Nude
-            </span>
           </div>
         </div>
       </div>
@@ -89,7 +82,6 @@ export const Mid: React.FC = () => {
                 key={cat.id}
                 selected={subCategory === cat.id}
                 onClick={() => handleSubCategoryChange(cat.id)}
-                icon={<span aria-hidden="true">{cat.emoji}</span>}
               >
                 {cat.label}
               </Chip>
