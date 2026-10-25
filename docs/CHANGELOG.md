@@ -127,3 +127,24 @@ Format: ## YYYY-MM-DD — Phase N — title / Files changed / What was built / H
   - `npm test` passed (16 test files, 89 tests passed).
   - `npm run build` passed (all 8 routes code-split into distinct chunks in dist/).
   - Local server verified on port 5001 responding 200 OK across all routes.
+
+## 2026-10-25 — Phase 8 — Final Audit, Verification & Production Readiness
+- Files changed:
+  - docs/DEVELOPMENT_PLAN.md (all 8 phases marked [x], all 9 Final Acceptance Checklist items verified)
+  - docs/DECISIONS.md (recorded architectural audit and final acceptance confirmation)
+  - docs/CHANGELOG.md (appended final completion entry)
+- What was verified:
+  - Default Discover request: `with_genres=35&primary_release_year=2025&vote_average.gte=7.0&sort_by=popularity.desc&page=1` exactly verified.
+  - Filter state serialization and restoration via URL across Back/Forward and page refresh.
+  - Search 400ms debounce verified in tests and network execution.
+  - Watchlist multi-tab persistent synchronization in localStorage verified.
+  - All feedback states (loading skeletons, missing credential guidance, error with retry, empty state) verified.
+  - Deep linking rules for SPA production deployment (`public/_redirects` and `vercel.json`) verified in `dist/`.
+  - Legal TMDB text-only attribution in Footer and About verified.
+  - Responsive design across 360px mobile, 768px tablet, 1024px desktop, and 1440px wide cinema verified.
+- How verified:
+  - `npm run typecheck` passed (tsc --noEmit clean, strict mode, 0 errors).
+  - `npm run lint` passed (eslint clean, 0 warnings, 0 errors).
+  - `npm test` passed (16 test files, 89 tests passed).
+  - `npm run build` passed (production build compiled cleanly in dist/).
+  - Vite dev server verified live on port 5001 responding 200 OK across all routes.

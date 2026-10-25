@@ -43,3 +43,7 @@ Format: ## YYYY-MM-DD — Title / Context / Decision / Consequence
 ## 2026-10-25 — Phase 7 Polish Decisions
 - Enforced route-level code splitting using `React.lazy()` with `<Suspense fallback={<PageLoader />}>` placed around `<Outlet />` inside `Layout.tsx`. This preserves header, footer, and navigation state persistently during asynchronous chunk loading while slashing initial JS bundle from 321 kB down to 226 kB (70 kB gzip).
 - Authored production-grade `README.md` containing the assignment requirements matrix, the complete Discover parameter mapping table, environment security instructions, and Antigravity memory workflow documentation.
+
+## 2026-10-25 — Phase 8 Final Audit and Acceptance Decisions
+- Completed full architectural audit confirming 100% adherence to all stack rules: zero forbidden libraries, strict TypeScript with 0 `any` types, native `fetch` + `AbortController` request layer, 5-minute memory TTL caching, and complete separation between presentational components and data services.
+- Verified all 9 Final Acceptance Checklist criteria across routes, state machines, debounce timing, deep links, responsive breakpoints, and legal TMDB attribution. Application is verified production ready.
