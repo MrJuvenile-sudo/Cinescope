@@ -95,3 +95,18 @@ Format: ## YYYY-MM-DD — Phase N — title / Files changed / What was built / H
   - `npm run lint` passed (eslint clean, 0 warnings, 0 errors).
   - `npm test` passed (13 test files, 79 tests passed).
   - `npm run build` passed (production build compiled in dist/ with 0 errors).
+
+## 2026-10-25 — Phase 6 — About, Contact, and NotFound pages
+- Files changed / created:
+  - Pages: src/pages/About.tsx (project narrative, tech stack architecture cards, criteria-to-implementation mapping with interactive links, text-only TMDB legal attribution, known limitations), src/pages/Contact.tsx (Name 2+ chars, email regex, subject select, message 10-1000 chars with live counter, accessible inline errors with aria-invalid/aria-describedby, auto-focus first invalid input, honest mailto: dispatch, transparency notice), src/pages/NotFound.tsx (cinematic 404 presentation with Home and Discover quick links)
+  - Tests: src/pages/About.test.tsx (3 tests), src/pages/Contact.test.tsx (5 tests), src/pages/NotFound.test.tsx (2 tests)
+- What was built:
+  - Comprehensive, beautifully styled About page highlighting engineering architecture and legal requirements.
+  - Fully accessible Contact form strictly following validation and honest no-backend disclosure constraints.
+  - Theatrical 404 screen with swift navigation recovery.
+- How verified:
+  - `npm run typecheck` passed (tsc --noEmit clean, 0 errors).
+  - `npm run lint` passed (eslint clean, 0 warnings, 0 errors).
+  - `npm test` passed (16 test files, 89 tests passed).
+  - `npm run build` passed (production bundle compiled cleanly in dist/).
+  - Vite dev server running on port 5001 responding 200 OK across `/`, `/about`, `/contact`, `/discover`, `/watchlist`.

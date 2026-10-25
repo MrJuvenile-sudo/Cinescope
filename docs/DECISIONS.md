@@ -34,3 +34,8 @@ Format: ## YYYY-MM-DD — Title / Context / Decision / Consequence
 - Rendered movie genres on Details as semantic interactive links directly pointing to parametric `/discover` with the genre preset and default filters.
 - Built an accessible `TrailerModal` using YouTube privacy-enhanced embed (`youtube-nocookie.com`), body scroll locking, Escape key dismissal, and an external direct fallback link.
 - Watchlist management equipped with reactive client-side sorting (Recently Added, Title A-Z, Highest Rated) and an accessible confirmation dialog (`role="alertdialog"`) protecting the "Clear All" action.
+
+## 2026-10-25 — Phase 6 About, Contact, and NotFound Decisions
+- Implemented accessible field-level validation on `Contact.tsx` with `aria-invalid`, `aria-describedby`, and auto-focusing the first invalid field on form submission.
+- Preserved complete transparency on the contact form via an honest `mailto:` flow and explicit disclaimers confirming that no automated backend delivery or storage occurs.
+- Mapped all academic assignment criteria in `About.tsx` to live functional route links, alongside strict text-only TMDB legal attribution.

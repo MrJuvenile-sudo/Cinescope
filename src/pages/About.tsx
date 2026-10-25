@@ -1,57 +1,75 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
-import { Database, ShieldCheck, ExternalLink, Code2 } from 'lucide-react'
+import { Database, ShieldCheck, ExternalLink, Code2, Film, Layers, Sparkles, Terminal } from 'lucide-react'
 import { useDocumentTitle } from '../hooks/useDocumentTitle'
 import { SectionHeading } from '../components/common/SectionHeading'
 import { Divider } from '../components/common/Divider'
 
 export const About: React.FC = () => {
-  useDocumentTitle('About — CineScope')
+  useDocumentTitle('About CineScope — CineScope')
 
   const techStack = [
     {
       title: 'React 18 & Vite',
-      desc: 'Blazing fast single-page application bundling, strict TypeScript typing, and responsive component lifecycle.',
+      icon: <Layers className="w-5 h-5" />,
+      desc: 'Modern single-page architecture with strict TypeScript compilation, fast HMR bundling, and declarative lifecycle hooks.',
     },
     {
       title: 'React Router v6',
-      desc: 'Declarative, client-side routing with URL synchronization serving as the single source of truth.',
+      icon: <Code2 className="w-5 h-5" />,
+      desc: 'Declarative client-side routing where the URL serves as the single source of truth for filters, pagination, and queries.',
     },
     {
-      title: 'Tailwind CSS',
-      desc: 'Custom "Midnight Cinema" design system with meticulous tokens, accessible contrast, and zero layout shift.',
+      title: 'Tailwind CSS v4',
+      icon: <Sparkles className="w-5 h-5" />,
+      desc: 'Bespoke "Midnight Cinema" design tokens featuring warm off-black surfaces, theatrical crimson accents, and gold highlights.',
     },
     {
-      title: 'TMDB API v3',
-      desc: 'Real-time REST endpoints powering trending reels, parametric discovery, instant search, and complete dossiers.',
+      title: 'TMDB REST API v3',
+      icon: <Database className="w-5 h-5" />,
+      desc: 'Dynamic REST endpoints powering weekly trending reels, parametric discovery, instant debounced search, and complete movie dossiers.',
     },
     {
-      title: 'Persistent Context & Storage',
-      desc: 'Local browser storage synchronization with multi-tab consistency and memory memoization.',
+      title: 'Persistent Watchlist Context',
+      icon: <Film className="w-5 h-5" />,
+      desc: 'React Context with validated localStorage initialization, multi-tab storage event synchronization, and optimistic UI updates.',
     },
     {
-      title: 'Strict Quality Suite',
-      desc: 'Unit testing via Vitest & React Testing Library, ESLint, and strict TypeScript compilation.',
+      title: 'Vitest & Testing Library',
+      icon: <Terminal className="w-5 h-5" />,
+      desc: 'Comprehensive unit test coverage across pure state machines, API clients, React hooks, and interactive pages.',
     },
   ]
 
   const requirements = [
     {
       label: 'Single Page Application (SPA)',
-      detail: 'Client-side routing across 7 core screens without page reloads; persistent state maintained through React Context.',
-      linkText: 'Test Discover Route',
+      detail: 'Client-side routing across 8 routes (Home, Discover, Search, Details, Watchlist, About, Contact, NotFound) with seamless navigation and path-only scroll restoration.',
+      linkText: 'Explore Discover Catalog',
       href: '/discover',
     },
     {
-      label: 'REST API Integration',
-      detail: 'Direct TMDB v3 API consumption with parametric filtering, 400ms debounced search, AbortController cancellation, and typed error handling.',
-      linkText: 'Test Search Route',
+      label: 'REST API & Discover Engine',
+      detail: 'Real-time TMDB v3 API consumption with parametric filtering by genre, year, and rating, guaranteed default mappings, and 5-minute memory TTL caching.',
+      linkText: 'Test Discover Filters',
+      href: '/discover',
+    },
+    {
+      label: 'Debounced Search Query',
+      detail: '400ms debounced title search with live URL synchronization, minimum 2-character validation, and screen reader announcements.',
+      linkText: 'Try Movie Search',
       href: '/search',
     },
     {
-      label: 'CSS Framework & Design System',
-      detail: 'Tailwind CSS "Midnight Cinema" palette featuring warm off-black, crimson accents, gold highlights, and Playfair serif typography.',
-      linkText: 'View Watchlist Experience',
+      label: 'CSS Framework & Design Tokens',
+      detail: 'Tailwind CSS "Midnight Cinema" theme with custom fonts (Playfair Display + Inter), subtle 3% grain atmosphere, and full keyboard accessibility.',
+      linkText: 'View Theatrical Home',
+      href: '/',
+    },
+    {
+      label: 'Shared State & Watchlist',
+      detail: 'React Context managing saved titles with cross-tab localStorage synchronization, interactive toast alerts, and client-side sorting.',
+      linkText: 'Open Personal Watchlist',
       href: '/watchlist',
     },
   ]
@@ -74,11 +92,12 @@ export const About: React.FC = () => {
       <Divider />
 
       {/* Architecture & Tech Stack Cards */}
-      <section className="space-y-6">
+      <section aria-labelledby="tech-stack-heading" className="space-y-6">
         <SectionHeading
+          id="tech-stack-heading"
           eyebrow="Engineering Architecture"
           title="Technology Stack"
-          subtitle="Built on a modern, strictly typed foundation adhering to modern web standards."
+          subtitle="Built on a modern, strictly typed foundation adhering to web quality standards."
         />
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -88,7 +107,7 @@ export const About: React.FC = () => {
               className="glass-panel rounded-2xl p-6 space-y-3 hover:border-[var(--border-strong)] transition-all"
             >
               <div className="w-10 h-10 rounded-xl bg-[var(--surface-2)] border border-[var(--border)] flex items-center justify-center text-[var(--gold)]">
-                <Code2 className="w-5 h-5" />
+                {tech.icon}
               </div>
               <h3 className="font-serif text-lg font-semibold text-[var(--text)]">{tech.title}</h3>
               <p className="text-sm text-[var(--text-muted)] leading-relaxed">{tech.desc}</p>
@@ -100,14 +119,15 @@ export const About: React.FC = () => {
       <Divider />
 
       {/* Assignment Requirements Mapping */}
-      <section className="space-y-6">
+      <section aria-labelledby="requirements-heading" className="space-y-6">
         <SectionHeading
+          id="requirements-heading"
           eyebrow="Demonstration"
           title="How Assignment Requirements Are Met"
           subtitle="Direct mapping between academic criteria and production implementation."
         />
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {requirements.map((req) => (
             <div
               key={req.label}
@@ -137,14 +157,14 @@ export const About: React.FC = () => {
       <Divider />
 
       {/* Data Source & Legal Attribution */}
-      <section className="glass-panel rounded-3xl p-8 sm:p-12 space-y-6">
+      <section aria-labelledby="attribution-heading" className="glass-panel rounded-3xl p-8 sm:p-12 space-y-6">
         <div className="flex items-center gap-3 text-xs font-semibold uppercase tracking-[0.24em] text-[var(--gold)]">
           <Database className="w-4 h-4" />
           <span>Data Source & Legal Attribution</span>
         </div>
 
         <div className="space-y-3 max-w-2xl">
-          <h2 className="font-serif text-2xl font-bold text-[var(--text)]">
+          <h2 id="attribution-heading" className="font-serif text-2xl font-bold text-[var(--text)]">
             The Movie Database (TMDB) Integration
           </h2>
           <p className="text-base text-[var(--text)] font-medium leading-relaxed">
@@ -171,13 +191,14 @@ export const About: React.FC = () => {
       </section>
 
       {/* Known Limitations */}
-      <section className="rounded-2xl border border-[var(--border)] bg-[var(--surface-2)]/30 p-6 sm:p-8 space-y-3">
-        <h3 className="text-xs font-semibold uppercase tracking-[0.24em] text-[var(--gold)]">
+      <section aria-labelledby="limitations-heading" className="rounded-2xl border border-[var(--border)] bg-[var(--surface-2)]/30 p-6 sm:p-8 space-y-3">
+        <h3 id="limitations-heading" className="text-xs font-semibold uppercase tracking-[0.24em] text-[var(--gold)]">
           Known Limitations
         </h3>
         <ul className="list-disc list-inside space-y-2 text-sm text-[var(--text-muted)] leading-relaxed">
           <li>Watchlist items are stored locally in the browser and not synced across multiple devices.</li>
           <li>Video playback is restricted to trailers and teasers provided through official YouTube embeds.</li>
+          <li>In-memory cache retains successful GET requests for 5 minutes per browser session.</li>
           <li>Full film streaming is out of scope per assignment specifications.</li>
         </ul>
       </section>
