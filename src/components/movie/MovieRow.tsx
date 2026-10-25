@@ -1,4 +1,4 @@
-import React, { useRef, useState, useEffect } from 'react'
+import React, { useRef, useState, useEffect, useCallback } from 'react'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
 import { Movie } from '../../types/tmdb'
 import { SectionHeading } from '../common/SectionHeading'
@@ -32,20 +32,23 @@ export const MovieRow: React.FC<MovieRowProps> = ({
   const rowRef = useRef<HTMLDivElement>(null)
   const [canScrollLeft, setCanScrollLeft] = useState(false)
   const [canScrollRight, setCanScrollRight] = useState(false)
+  const [scrollProgress, setScrollProgress] = useState(0)
 
-  const checkScroll = () => {
+  const checkScroll = useCallback(() => {
     if (!rowRef.current) return
     const { scrollLeft, scrollWidth, clientWidth } = rowRef.current
     setCanScrollLeft(scrollLeft > 10)
     setCanScrollRight(scrollLeft + clientWidth < scrollWidth - 10)
-  }
+    const maxScroll = scrollWidth - clientWidth
+    setScrollProgress(maxScroll > 0 ? Math.min(scrollLeft / maxScroll, 1) : 0)
+  }, [])
 
   useEffect(() => {
     checkScroll()
     const handleResize = () => checkScroll()
     window.addEventListener('resize', handleResize)
     return () => window.removeEventListener('resize', handleResize)
-  }, [movies, loading])
+  }, [movies, loading, checkScroll])
 
   const scroll = (direction: 'left' | 'right') => {
     if (!rowRef.current) return
@@ -75,9 +78,9 @@ export const MovieRow: React.FC<MovieRowProps> = ({
               onClick={() => scroll('left')}
               disabled={!canScrollLeft}
               aria-label={`Scroll ${title} left`}
-              className={`p-2 rounded-xl border border-[var(--border)] bg-[var(--surface-2)] text-white transition-all min-h-[40px] min-w-[40px] flex items-center justify-center focus-visible:outline-2 focus-visible:outline-[var(--primary)] ${
+              className={`p-2 rounded-xl border border-[var(--border)] bg-[var(--surface-2)] text-white transition-all duration-200 min-h-[40px] min-w-[40px] flex items-center justify-center focus-visible:outline-2 focus-visible:outline-[var(--primary)] ${
                 canScrollLeft
-                  ? 'hover:bg-white/10 hover:border-[var(--border-strong)] cursor-pointer'
+                  ? 'hover:bg-white/10 hover:border-[var(--border-strong)] hover:shadow-[var(--shadow-glow-red)] cursor-pointer'
                   : 'opacity-30 cursor-not-allowed'
               }`}
             >
@@ -89,9 +92,9 @@ export const MovieRow: React.FC<MovieRowProps> = ({
               onClick={() => scroll('right')}
               disabled={!canScrollRight}
               aria-label={`Scroll ${title} right`}
-              className={`p-2 rounded-xl border border-[var(--border)] bg-[var(--surface-2)] text-white transition-all min-h-[40px] min-w-[40px] flex items-center justify-center focus-visible:outline-2 focus-visible:outline-[var(--primary)] ${
+              className={`p-2 rounded-xl border border-[var(--border)] bg-[var(--surface-2)] text-white transition-all duration-200 min-h-[40px] min-w-[40px] flex items-center justify-center focus-visible:outline-2 focus-visible:outline-[var(--primary)] ${
                 canScrollRight
-                  ? 'hover:bg-white/10 hover:border-[var(--border-strong)] cursor-pointer'
+                  ? 'hover:bg-white/10 hover:border-[var(--border-strong)] hover:shadow-[var(--shadow-glow-red)] cursor-pointer'
                   : 'opacity-30 cursor-not-allowed'
               }`}
             >
@@ -119,9 +122,9 @@ export const MovieRow: React.FC<MovieRowProps> = ({
         </div>
       ) : (
         <div className="relative group/row">
-          {/* Left gradient edge fade */}
+          {/* Left gradient edge fade — wider for cinematic feel */}
           <div
-            className={`absolute left-0 top-0 bottom-0 w-12 bg-gradient-to-r from-[var(--bg)] to-transparent pointer-events-none z-10 transition-opacity duration-200 ${
+            className={`absolute left-0 top-0 bottom-0 w-20 bg-gradient-to-r from-[var(--bg)] to-transparent pointer-events-none z-10 transition-opacity duration-200 ${
               canScrollLeft ? 'opacity-100' : 'opacity-0'
             }`}
           />
@@ -144,12 +147,23 @@ export const MovieRow: React.FC<MovieRowProps> = ({
             ))}
           </div>
 
-          {/* Right gradient edge fade */}
+          {/* Right gradient edge fade — wider for cinematic feel */}
           <div
-            className={`absolute right-0 top-0 bottom-0 w-12 bg-gradient-to-l from-[var(--bg)] to-transparent pointer-events-none z-10 transition-opacity duration-200 ${
+            className={`absolute right-0 top-0 bottom-0 w-20 bg-gradient-to-l from-[var(--bg)] to-transparent pointer-events-none z-10 transition-opacity duration-200 ${
               canScrollRight ? 'opacity-100' : 'opacity-0'
             }`}
           />
+
+          {/* Scroll-progress thin bar */}
+          {movies.length > 0 && (
+            <div className="scroll-bar-track mt-3 mx-1">
+              <div
+                className="scroll-bar-thumb"
+                style={{ width: `${Math.max(5, scrollProgress * 100)}%` }}
+                aria-hidden="true"
+              />
+            </div>
+          )}
         </div>
       )}
     </section>

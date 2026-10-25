@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Link, NavLink, useNavigate } from 'react-router-dom'
 import { Clapperboard, Search, Menu } from 'lucide-react'
 import { useWatchlist } from '../../context/WatchlistContext'
@@ -8,8 +8,15 @@ import { MobileNav } from './MobileNav'
 export const Header: React.FC = () => {
   const [isMobileNavOpen, setIsMobileNavOpen] = useState(false)
   const [headerQuery, setHeaderQuery] = useState('')
+  const [scrolled, setScrolled] = useState(false)
   const navigate = useNavigate()
   const { count } = useWatchlist()
+
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 24)
+    window.addEventListener('scroll', onScroll, { passive: true })
+    return () => window.removeEventListener('scroll', onScroll)
+  }, [])
 
   const handleSearchSubmit = (q: string) => {
     if (q.trim()) {
@@ -20,15 +27,21 @@ export const Header: React.FC = () => {
 
   return (
     <>
-      <header className="sticky top-0 z-40 w-full glass-panel border-b border-[var(--border)]">
+      <header
+        className={`sticky top-0 z-40 w-full border-b transition-all duration-300 ${
+          scrolled
+            ? 'glass-panel-strong border-[var(--border)]'
+            : 'bg-transparent border-transparent backdrop-blur-none'
+        }`}
+      >
         <div className="max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-10 h-16 sm:h-20 flex items-center justify-between gap-4">
           {/* Logo & Brand */}
           <Link
             to="/"
             className="flex items-center gap-2.5 group focus-visible:outline-2 focus-visible:outline-[var(--primary)] focus-visible:outline-offset-4 rounded-lg"
           >
-            <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-gradient-to-br from-[#1C1C24] to-[#101015] border border-[var(--border-strong)] flex items-center justify-center shadow-lg group-hover:border-[var(--gold)]/60 transition-colors">
-              <Clapperboard className="w-5 h-5 text-[var(--gold)] transition-transform duration-200 group-hover:rotate-[-6deg]" />
+            <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-gradient-to-br from-[#1C1C24] to-[#101015] border border-[var(--border-strong)] flex items-center justify-center shadow-lg group-hover:border-[var(--gold)]/70 group-hover:shadow-[var(--shadow-glow-gold)] transition-all duration-200">
+              <Clapperboard className="w-5 h-5 text-[var(--gold)] transition-transform duration-300 group-hover:rotate-[-8deg] group-hover:scale-110" />
             </div>
             <span className="font-serif text-xl sm:text-2xl font-bold tracking-tight text-[var(--text)]">
               Cine<span className="text-[var(--primary)]">Scope</span>
@@ -55,7 +68,7 @@ export const Header: React.FC = () => {
                 <>
                   <span>Home</span>
                   {isActive && (
-                    <span className="absolute bottom-0 left-0 right-0 h-[2px] bg-[var(--primary)] rounded-full animate-in fade-in duration-200" />
+                    <span className="absolute bottom-0 left-0 right-0 h-[2px] bg-gradient-to-r from-[var(--primary)] to-[var(--primary-hover)] rounded-full shadow-[0_0_8px_rgba(229,9,20,0.6)] animate-fade-in" />
                   )}
                 </>
               )}
@@ -75,7 +88,7 @@ export const Header: React.FC = () => {
                 <>
                   <span>Discover</span>
                   {isActive && (
-                    <span className="absolute bottom-0 left-0 right-0 h-[2px] bg-[var(--primary)] rounded-full animate-in fade-in duration-200" />
+                    <span className="absolute bottom-0 left-0 right-0 h-[2px] bg-gradient-to-r from-[var(--primary)] to-[var(--primary-hover)] rounded-full shadow-[0_0_8px_rgba(229,9,20,0.6)] animate-fade-in" />
                   )}
                 </>
               )}
@@ -96,14 +109,14 @@ export const Header: React.FC = () => {
                   <span>Watchlist</span>
                   {count > 0 && (
                     <span
-                      className="px-1.5 py-0.5 text-[11px] font-semibold rounded-full tabular-nums bg-[var(--primary)] text-white shadow-[0_0_8px_rgba(229,9,20,0.4)]"
+                      className="px-1.5 py-0.5 text-[11px] font-bold rounded-full tabular-nums bg-[var(--primary)] text-white shadow-[var(--shadow-glow-red)] animate-scale-in"
                       aria-label={`Watchlist, ${count} movies`}
                     >
                       {count}
                     </span>
                   )}
                   {isActive && (
-                    <span className="absolute bottom-0 left-0 right-0 h-[2px] bg-[var(--primary)] rounded-full animate-in fade-in duration-200" />
+                    <span className="absolute bottom-0 left-0 right-0 h-[2px] bg-gradient-to-r from-[var(--primary)] to-[var(--primary-hover)] rounded-full shadow-[0_0_8px_rgba(229,9,20,0.6)] animate-fade-in" />
                   )}
                 </>
               )}

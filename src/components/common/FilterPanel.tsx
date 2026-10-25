@@ -18,6 +18,9 @@ export interface FilterPanelProps {
   className?: string
 }
 
+const selectClass =
+  'w-full appearance-none px-3.5 py-2.5 rounded-xl bg-[var(--surface-2)] border border-[var(--border)] text-sm text-[var(--text)] font-medium focus-visible:outline-2 focus-visible:outline-[var(--primary)] cursor-pointer pr-10 hover:border-[var(--border-strong)] focus-visible:border-[var(--primary)]/50 transition-all min-h-[44px]'
+
 export const FilterPanel: React.FC<FilterPanelProps> = ({
   filters,
   genres,
@@ -49,6 +52,14 @@ export const FilterPanel: React.FC<FilterPanelProps> = ({
     filters.rating === DISCOVER_DEFAULTS.rating &&
     filters.sort === DISCOVER_DEFAULTS.sort
 
+  // Count how many filters are non-default
+  const activeCount = [
+    filters.genre !== DISCOVER_DEFAULTS.genre,
+    filters.year !== DISCOVER_DEFAULTS.year,
+    filters.rating !== DISCOVER_DEFAULTS.rating,
+    filters.sort !== DISCOVER_DEFAULTS.sort,
+  ].filter(Boolean).length
+
   return (
     <div
       aria-label="Filter & Sort Controls"
@@ -58,6 +69,11 @@ export const FilterPanel: React.FC<FilterPanelProps> = ({
         <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.2em] text-[var(--gold)]">
           <SlidersHorizontal className="w-4 h-4" />
           <span>Curated Filters</span>
+          {activeCount > 0 && (
+            <span className="ml-1 px-1.5 py-0.5 text-[10px] font-bold rounded-full bg-[var(--primary)] text-white shadow-[var(--shadow-glow-red)] animate-scale-in">
+              {activeCount}
+            </span>
+          )}
         </div>
 
         <Button
@@ -86,7 +102,7 @@ export const FilterPanel: React.FC<FilterPanelProps> = ({
               id="filter-genre"
               value={filters.genre}
               onChange={handleGenreChange}
-              className="w-full appearance-none px-3.5 py-2.5 rounded-xl bg-[var(--surface-2)] border border-[var(--border)] text-sm text-[var(--text)] font-medium focus-visible:outline-2 focus-visible:outline-[var(--primary)] cursor-pointer pr-10 hover:border-[var(--border-strong)] transition-colors min-h-[44px]"
+              className={`${selectClass} ${filters.genre !== DISCOVER_DEFAULTS.genre ? 'border-[var(--primary)]/40 text-[var(--text)]' : ''}`}
             >
               {genres.map((g) => (
                 <option key={g.id} value={String(g.id)} className="bg-[var(--surface-2)] text-[var(--text)]">
@@ -111,7 +127,7 @@ export const FilterPanel: React.FC<FilterPanelProps> = ({
               id="filter-year"
               value={filters.year}
               onChange={handleYearChange}
-              className="w-full appearance-none px-3.5 py-2.5 rounded-xl bg-[var(--surface-2)] border border-[var(--border)] text-sm text-[var(--text)] font-medium focus-visible:outline-2 focus-visible:outline-[var(--primary)] cursor-pointer pr-10 hover:border-[var(--border-strong)] transition-colors min-h-[44px]"
+              className={`${selectClass} ${filters.year !== DISCOVER_DEFAULTS.year ? 'border-[var(--primary)]/40' : ''}`}
             >
               {years.map((y) => (
                 <option key={y.value} value={y.value} className="bg-[var(--surface-2)] text-[var(--text)]">
@@ -136,7 +152,7 @@ export const FilterPanel: React.FC<FilterPanelProps> = ({
               id="filter-rating"
               value={filters.rating}
               onChange={handleRatingChange}
-              className="w-full appearance-none px-3.5 py-2.5 rounded-xl bg-[var(--surface-2)] border border-[var(--border)] text-sm text-[var(--text)] font-medium focus-visible:outline-2 focus-visible:outline-[var(--primary)] cursor-pointer pr-10 hover:border-[var(--border-strong)] transition-colors min-h-[44px]"
+              className={`${selectClass} ${filters.rating !== DISCOVER_DEFAULTS.rating ? 'border-[var(--primary)]/40' : ''}`}
             >
               {RATING_OPTIONS.map((r) => (
                 <option key={r.value} value={r.value} className="bg-[var(--surface-2)] text-[var(--text)]">
@@ -161,7 +177,7 @@ export const FilterPanel: React.FC<FilterPanelProps> = ({
               id="filter-sort"
               value={filters.sort}
               onChange={handleSortChange}
-              className="w-full appearance-none px-3.5 py-2.5 rounded-xl bg-[var(--surface-2)] border border-[var(--border)] text-sm text-[var(--text)] font-medium focus-visible:outline-2 focus-visible:outline-[var(--primary)] cursor-pointer pr-10 hover:border-[var(--border-strong)] transition-colors min-h-[44px]"
+              className={`${selectClass} ${filters.sort !== DISCOVER_DEFAULTS.sort ? 'border-[var(--primary)]/40' : ''}`}
             >
               {SORT_OPTIONS.map((s) => (
                 <option key={s.value} value={s.value} className="bg-[var(--surface-2)] text-[var(--text)]">

@@ -15,14 +15,14 @@ import { Divider } from '../components/common/Divider'
 import { Button } from '../components/common/Button'
 
 const GENRE_SHORTCUTS = [
-  { id: '28', name: 'Action' },
-  { id: '35', name: 'Comedy' },
-  { id: '18', name: 'Drama' },
-  { id: '878', name: 'Science Fiction' },
-  { id: '53', name: 'Thriller' },
-  { id: '12', name: 'Adventure' },
-  { id: '16', name: 'Animation' },
-  { id: '27', name: 'Horror' },
+  { id: '28', name: 'Action', emoji: '⚡' },
+  { id: '35', name: 'Comedy', emoji: '😂' },
+  { id: '18', name: 'Drama', emoji: '🎭' },
+  { id: '878', name: 'Science Fiction', emoji: '🚀' },
+  { id: '53', name: 'Thriller', emoji: '🔪' },
+  { id: '12', name: 'Adventure', emoji: '🗺️' },
+  { id: '16', name: 'Animation', emoji: '✨' },
+  { id: '27', name: 'Horror', emoji: '👻' },
 ]
 
 export const Home: React.FC = () => {
@@ -89,7 +89,7 @@ export const Home: React.FC = () => {
         </div>
 
         <div className="flex flex-wrap gap-2.5 pt-1">
-          {GENRE_SHORTCUTS.map((genre) => {
+          {GENRE_SHORTCUTS.map((genre, idx) => {
             const discoverUrl = `/discover?${buildDiscoverParams({
               genre: genre.id,
               year: 'any',
@@ -99,8 +99,8 @@ export const Home: React.FC = () => {
             }).toString()}`
 
             return (
-              <Link key={genre.id} to={discoverUrl}>
-                <Chip>{genre.name}</Chip>
+              <Link key={genre.id} to={discoverUrl} className={`animate-fade-up stagger-${Math.min(idx + 1, 6)}`}>
+                <Chip icon={<span aria-hidden="true">{genre.emoji}</span>}>{genre.name}</Chip>
               </Link>
             )
           })}

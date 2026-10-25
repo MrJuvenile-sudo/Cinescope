@@ -120,7 +120,134 @@ body::after {
   background: linear-gradient(90deg, transparent, rgba(214, 178, 94, 0.5), transparent);
 }
 
-/* Motion safety */
+/* ─── Animation keyframes ─────────────────────────────────────────────────── */
+
+@keyframes fade-up {
+  from { opacity: 0; transform: translateY(18px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fade-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes scale-in {
+  from { opacity: 0; transform: scale(0.94); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+@keyframes slide-in-right {
+  from { opacity: 0; transform: translateX(24px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes shimmer {
+  0%   { background-position: -400px 0; }
+  100% { background-position: 400px 0; }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50%       { transform: translateY(-6px); }
+}
+
+@keyframes pulse-glow {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(229, 9, 20, 0); }
+  50%       { box-shadow: 0 0 0 6px rgba(229, 9, 20, 0.18); }
+}
+
+/* ─── Animation utility classes ──────────────────────────────────────────── */
+
+.animate-fade-up        { animation: fade-up  0.4s cubic-bezier(0.22, 1, 0.36, 1) both; }
+.animate-fade-in        { animation: fade-in  0.3s ease both; }
+.animate-scale-in       { animation: scale-in 0.35s cubic-bezier(0.22, 1, 0.36, 1) both; }
+.animate-slide-right    { animation: slide-in-right 0.35s cubic-bezier(0.22, 1, 0.36, 1) both; }
+.animate-float          { animation: float 3.5s ease-in-out infinite; }
+.animate-pulse-glow     { animation: pulse-glow 2.4s ease-in-out infinite; }
+
+/* Stagger delays (used on grid / row children) */
+.stagger-1  { animation-delay: 0.05s; }
+.stagger-2  { animation-delay: 0.10s; }
+.stagger-3  { animation-delay: 0.15s; }
+.stagger-4  { animation-delay: 0.20s; }
+.stagger-5  { animation-delay: 0.25s; }
+.stagger-6  { animation-delay: 0.30s; }
+
+/* Shimmer skeleton */
+.shimmer {
+  background: linear-gradient(
+    90deg,
+    rgba(255,255,255,0.03) 0%,
+    rgba(255,255,255,0.09) 40%,
+    rgba(255,255,255,0.03) 80%
+  );
+  background-size: 400px 100%;
+  animation: shimmer 1.6s ease-in-out infinite;
+}
+
+/* ─── Extended design tokens ─────────────────────────────────────────────── */
+
+:root {
+  --shadow-card: 0 8px 32px -8px rgba(0,0,0,0.65);
+  --shadow-card-hover: 0 24px 48px -16px rgba(0,0,0,0.85);
+  --shadow-glow-red: 0 0 24px rgba(229,9,20,0.35);
+  --shadow-glow-gold: 0 0 18px rgba(214,178,94,0.28);
+  --gradient-hero-left: linear-gradient(to right, #0A0A0D 0%, rgba(10,10,13,0.85) 50%, transparent 100%);
+  --gradient-hero-bottom: linear-gradient(to top, #0A0A0D 0%, rgba(10,10,13,0.65) 55%, transparent 100%);
+}
+
+/* ─── Refined glass panel ─────────────────────────────────────────────────── */
+
+.glass-panel {
+  background: rgba(10, 10, 13, 0.75);
+  backdrop-filter: blur(20px) saturate(160%);
+  -webkit-backdrop-filter: blur(20px) saturate(160%);
+  border: 1px solid rgba(255,255,255,0.08);
+}
+
+.glass-panel-strong {
+  background: rgba(16, 16, 21, 0.88);
+  backdrop-filter: blur(28px) saturate(180%);
+  -webkit-backdrop-filter: blur(28px) saturate(180%);
+  border: 1px solid rgba(255,255,255,0.12);
+}
+
+/* ─── Card hover convenience class ──────────────────────────────────────── */
+
+.card-hover {
+  transition: transform 0.28s cubic-bezier(0.22,1,0.36,1),
+              box-shadow 0.28s ease,
+              border-color 0.2s ease;
+}
+.card-hover:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-card-hover);
+}
+
+/* ─── Glow accent utilities ──────────────────────────────────────────────── */
+
+.glow-red  { box-shadow: var(--shadow-glow-red); }
+.glow-gold { box-shadow: var(--shadow-glow-gold); }
+.text-glow-gold { text-shadow: 0 0 14px rgba(214,178,94,0.45); }
+
+/* ─── Scroll-progress bar ─────────────────────────────────────────────────── */
+
+.scroll-bar-track {
+  height: 2px;
+  background: rgba(255,255,255,0.06);
+  border-radius: 2px;
+  overflow: hidden;
+}
+.scroll-bar-thumb {
+  height: 100%;
+  background: linear-gradient(90deg, var(--primary), var(--gold));
+  border-radius: 2px;
+  transition: width 0.15s ease;
+}
+
+/* ─── Motion safety ──────────────────────────────────────────────────────── */
+
 @media (prefers-reduced-motion: reduce) {
   *, ::before, ::after {
     animation-duration: 0.01ms !important;

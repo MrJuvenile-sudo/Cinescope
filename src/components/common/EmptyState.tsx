@@ -19,10 +19,10 @@ export const EmptyState: React.FC<EmptyStateProps> = ({
   return (
     <div
       role="status"
-      className={`max-w-md mx-auto py-16 px-6 text-center rounded-3xl border border-[var(--border)] bg-[var(--surface)] shadow-2xl space-y-5 ${className}`}
+      className={`max-w-md mx-auto py-16 px-6 text-center rounded-3xl border border-[var(--border)] bg-gradient-to-b from-[var(--surface-2)]/50 to-[var(--surface)] shadow-2xl space-y-5 animate-fade-up ${className}`}
     >
-      <div className="w-16 h-16 rounded-full bg-[var(--surface-2)] border border-[var(--border-strong)] mx-auto flex items-center justify-center text-[var(--gold)] shadow-inner">
-        {icon || <Film className="w-8 h-8" />}
+      <div className="w-20 h-20 rounded-full bg-[var(--surface-2)] border border-[var(--border-strong)] mx-auto flex items-center justify-center text-[var(--gold)] shadow-inner animate-float">
+        {icon || <Film className="w-9 h-9" />}
       </div>
 
       <div>

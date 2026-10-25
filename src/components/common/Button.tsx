@@ -29,9 +29,9 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
 
     const variantClasses = {
       primary:
-        'bg-gradient-to-b from-[#ff2a38] to-[#E50914] text-white font-semibold shadow-[inset_0_1px_0_rgba(255,255,255,0.22)] hover:brightness-110 hover:-translate-y-[1px] active:translate-y-0 active:brightness-95',
+        'bg-gradient-to-b from-[#ff3040] to-[#E50914] text-white font-semibold shadow-[inset_0_1px_0_rgba(255,255,255,0.22),var(--shadow-glow-red)] hover:brightness-110 hover:-translate-y-[2px] hover:shadow-[inset_0_1px_0_rgba(255,255,255,0.22),0_0_32px_rgba(229,9,20,0.45)] active:translate-y-0 active:brightness-95 active:shadow-none',
       secondary:
-        'bg-[rgba(10,10,13,0.72)] border border-[var(--border)] text-[var(--text)] hover:text-white hover:border-[var(--border-strong)] hover:bg-white/5 hover:-translate-y-[1px] active:translate-y-0 font-medium backdrop-blur-md',
+        'bg-[rgba(10,10,13,0.72)] border border-[var(--border)] text-[var(--text)] hover:text-white hover:border-[var(--border-strong)] hover:bg-white/8 hover:-translate-y-[1px] active:translate-y-0 font-medium backdrop-blur-md',
       ghost:
         'text-[var(--text-muted)] hover:text-[var(--text)] hover:bg-white/5 active:bg-white/10 font-medium',
     }[variant]

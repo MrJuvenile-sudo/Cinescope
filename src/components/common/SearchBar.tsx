@@ -53,7 +53,7 @@ export const SearchBar: React.FC<SearchBarProps> = ({
           onChange={(e) => onChange(e.target.value)}
           placeholder="Search movies..."
           autoFocus={autoFocus}
-          className="w-44 lg:w-56 pl-8 pr-7 py-1.5 rounded-xl bg-[var(--surface-2)] border border-[var(--border)] text-xs text-[var(--text)] placeholder-[var(--text-muted)] focus-visible:outline-2 focus-visible:outline-[var(--primary)] transition-all hover:border-[var(--border-strong)]"
+          className="w-44 lg:w-56 pl-8 pr-7 py-1.5 rounded-xl bg-[var(--surface-2)] border border-[var(--border)] text-xs text-[var(--text)] placeholder-[var(--text-muted)] focus-visible:outline-2 focus-visible:outline-[var(--primary)] focus-visible:w-64 transition-all duration-200 hover:border-[var(--border-strong)]"
         />
         {value && (
           <button
@@ -92,7 +92,7 @@ export const SearchBar: React.FC<SearchBarProps> = ({
         placeholder={placeholder}
         autoFocus={autoFocus}
         autoComplete="off"
-        className="w-full pl-12 sm:pl-14 pr-12 py-3.5 sm:py-4 rounded-2xl bg-[var(--surface-2)] border border-[var(--border)] text-sm sm:text-base text-[var(--text)] placeholder-[var(--text-muted)] focus-visible:outline-2 focus-visible:outline-[var(--primary)] transition-all shadow-inner hover:border-[var(--border-strong)]"
+        className="w-full pl-12 sm:pl-14 pr-12 py-3.5 sm:py-4 rounded-2xl bg-[var(--surface-2)] border border-[var(--border)] text-sm sm:text-base text-[var(--text)] placeholder-[var(--text-muted)] focus-visible:outline-2 focus-visible:outline-[var(--primary)] focus-visible:border-[var(--primary)]/40 focus-visible:shadow-[0_0_0_3px_rgba(229,9,20,0.12)] transition-all shadow-inner hover:border-[var(--border-strong)]"
       />
 
       {value && (
