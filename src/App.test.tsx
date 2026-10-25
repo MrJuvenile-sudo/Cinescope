@@ -19,7 +19,7 @@ describe('App Smoke Test', () => {
 
     // Discover page heading rendered
     expect(
-      await screen.findByRole('heading', { name: /Curated Discovery Engine/i })
+      await screen.findByRole('heading', { name: /Comedy Films/i })
     ).toBeInTheDocument()
   })
 

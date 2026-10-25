@@ -47,3 +47,21 @@ Format: ## YYYY-MM-DD — Phase N — title / Files changed / What was built / H
   - `npm run lint` passed (eslint with 0 errors, 0 warnings).
   - `npm test` passed (7 test files, 45 test cases covering credential logic, cache hits, error mapping, aborts, retry, watchlist, and helpers).
   - `npm run build` passed (clean production bundle).
+
+## 2026-10-25 — Phase 3 — Discover (assignment centerpiece)
+- Files changed / created:
+  - Logic & URL State: src/utils/discoverUrlState.ts (parseDiscoverParams, buildDiscoverParams, toTmdbParams, DEFAULTS, validation, vote_count.gte=50 rule for vote_average.desc), src/utils/discoverUrlState.test.ts (9 tests)
+  - Components: src/components/movie/MovieCard.tsx (2/3 aspect poster, glass rating pill, circular glass WatchlistButton, hover lift & crimson glow, metadata, lazy images, fallback poster), src/components/movie/MovieGrid.tsx (responsive columns 2/3/4/5/6 with staggered entry), src/components/common/FilterPanel.tsx (glass panel, custom selects for genre, year, rating, sort, reset button)
+  - Page: src/pages/Discover.tsx (URL single source of truth, canonical normalization with replace:true, dynamic heading based on genre and year, total results count, 12-card LoadingSkeleton, ErrorState with Retry, EmptyState, clamped Pagination, page change scroll-to-top, dev-only TMDB query inspector)
+  - Tests: src/pages/Discover.test.tsx (4 tests verifying URL sync, filter changes resetting page to 1, error state, and empty state), src/test/setup.ts (Element.prototype.scrollIntoView mock for jsdom), src/App.test.tsx
+- What was built:
+  - Complete parametric movie discovery engine strictly synchronized with the URL.
+  - Guaranteed default request mapping: `/discover/movie?with_genres=35&primary_release_year=2025&vote_average.gte=7.0&sort_by=popularity.desc&page=1`.
+  - Seamless filter updates resetting pagination to page 1.
+  - Full error and setup recovery state for missing credential or offline network failure.
+- How verified:
+  - `npm run typecheck` passed (tsc --noEmit, 0 errors).
+  - `npm run lint` passed (eslint, 0 errors, 0 warnings).
+  - `npm test` passed (9 test files, 58 tests passed).
+  - `npm run build` passed (production build in dist/).
+  - Dev server tested for `/discover` responding 200 OK.

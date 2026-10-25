@@ -1,115 +1,226 @@
-import React from 'react'
-import { Filter, SlidersHorizontal, ArrowUpDown } from 'lucide-react'
+import React, { useEffect, useRef, useMemo } from 'react'
+import { useSearchParams } from 'react-router-dom'
+import { Compass, Sparkles, Terminal } from 'lucide-react'
+import {
+  parseDiscoverParams,
+  buildDiscoverParams,
+  toTmdbParams,
+  DiscoverFilters,
+  DISCOVER_DEFAULTS,
+} from '../utils/discoverUrlState'
+import { discoverMovies, getGenres, FALLBACK_GENRES } from '../services/movieService'
+import { useTmdbQuery } from '../hooks/useTmdbQuery'
 import { useDocumentTitle } from '../hooks/useDocumentTitle'
 import { SectionHeading } from '../components/common/SectionHeading'
+import { FilterPanel } from '../components/common/FilterPanel'
+import { MovieGrid } from '../components/movie/MovieGrid'
+import { LoadingSkeleton } from '../components/common/LoadingSkeleton'
+import { ErrorState } from '../components/common/ErrorState'
+import { EmptyState } from '../components/common/EmptyState'
+import { Pagination } from '../components/common/Pagination'
 import { Button } from '../components/common/Button'
-import { Divider } from '../components/common/Divider'
 
 export const Discover: React.FC = () => {
-  useDocumentTitle('Discover — Filter & Browse')
+  const [searchParams, setSearchParams] = useSearchParams()
+  const resultsTopRef = useRef<HTMLDivElement>(null)
+  const isInitialMount = useRef(true)
+
+  // 1. URL is the single source of truth: parse & validate
+  const { filters, wasNormalized } = useMemo(
+    () => parseDiscoverParams(searchParams),
+    [searchParams]
+  )
+
+  // 2. If invalid or missing params, replace URL immediately with canonical defaults
+  useEffect(() => {
+    if (wasNormalized) {
+      setSearchParams(buildDiscoverParams(filters), { replace: true })
+    }
+  }, [wasNormalized, filters, setSearchParams])
+
+  // 3. Fetch Genres list (with cached/fallback support)
+  const { data: genresData } = useTmdbQuery(
+    (signal) => getGenres(signal),
+    []
+  )
+  const genres = genresData?.genres?.length ? genresData.genres : FALLBACK_GENRES
+
+  // Derive active genre name for dynamic heading
+  const selectedGenre = useMemo(() => {
+    return (
+      genres.find((g) => String(g.id) === filters.genre) || {
+        id: 35,
+        name: 'Comedy',
+      }
+    )
+  }, [genres, filters.genre])
+
+  // 4. Fetch movies via discover endpoint using toTmdbParams
+  const tmdbQueryParams = useMemo(() => toTmdbParams(filters), [filters])
+
+  const {
+    data: moviesData,
+    loading,
+    error,
+    retry,
+  } = useTmdbQuery(
+    (signal, isRetry) => discoverMovies(tmdbQueryParams, signal, isRetry),
+    [filters.genre, filters.year, filters.rating, filters.sort, filters.page]
+  )
+
+  // 5. Dynamic document title
+  const headingYear = filters.year === 'any' ? 'All Time' : filters.year
+  useDocumentTitle(`Discover ${selectedGenre.name} (${headingYear}) — CineScope`)
+
+  // 6. Handle page overflow: if page > min(total_pages, 500), replace URL to last valid page
+  useEffect(() => {
+    if (moviesData && moviesData.total_pages > 0) {
+      const maxPages = Math.min(moviesData.total_pages, 500)
+      const currentPage = parseInt(filters.page, 10)
+      if (currentPage > maxPages) {
+        setSearchParams(
+          buildDiscoverParams({ ...filters, page: String(maxPages) }),
+          { replace: true }
+        )
+      }
+    }
+  }, [moviesData, filters, setSearchParams])
+
+  // 7. Scroll to top of results on page change (skipping initial mount)
+  useEffect(() => {
+    if (isInitialMount.current) {
+      isInitialMount.current = false
+      return
+    }
+    resultsTopRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+  }, [filters.page])
+
+  // Filter change handlers
+  const handleFilterChange = (newFilters: Partial<DiscoverFilters>) => {
+    setSearchParams(buildDiscoverParams({ ...filters, ...newFilters }), {
+      replace: false,
+    })
+  }
+
+  const handleReset = () => {
+    setSearchParams(buildDiscoverParams(DISCOVER_DEFAULTS), { replace: false })
+  }
+
+  const handlePageChange = (newPage: number) => {
+    setSearchParams(
+      buildDiscoverParams({ ...filters, page: String(newPage) }),
+      { replace: false }
+    )
+  }
+
+  // Derive dynamic heading text
+  const headingTitle =
+    filters.year === 'any'
+      ? `${selectedGenre.name} Cinema`
+      : `${filters.year} ${selectedGenre.name} Films`
+
+  const totalPages = moviesData ? Math.min(moviesData.total_pages, 500) : 1
+  const currentPage = parseInt(filters.page, 10)
+  const totalResults = moviesData?.total_results ?? 0
 
   return (
     <div className="max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-10 py-8 sm:py-12 space-y-8">
-      {/* Header */}
+      {/* Page Header */}
       <div>
         <SectionHeading
           as="h1"
           eyebrow="Parametric Discovery"
-          title="Curated Discovery Engine"
-          subtitle="Explore the TMDB catalog with precision filters. The URL maintains synchronized state for seamless bookmarking, sharing, and navigation."
+          title={headingTitle}
+          subtitle={`Discover the greatest ${selectedGenre.name.toLowerCase()} features. Filter by release vintage, audience acclaim, and sorting preferences.`}
         />
       </div>
 
-      {/* Filter Panel Placeholder */}
-      <div className="glass-panel rounded-2xl p-6 sm:p-8 space-y-6">
-        <div className="flex items-center justify-between pb-4 border-b border-[var(--border)]">
-          <div className="flex items-center gap-2 text-sm font-semibold text-[var(--gold)]">
-            <SlidersHorizontal className="w-4 h-4" />
-            <span>Active Filters & Sorting</span>
-          </div>
-          <span className="text-xs text-[var(--text-muted)] font-mono">
-            Default: Comedy (35) · 2025 · 7.0+ · Popularity
-          </span>
-        </div>
+      {/* Filter & Sort Controls Panel */}
+      <FilterPanel
+        filters={filters}
+        genres={genres}
+        onFilterChange={handleFilterChange}
+        onReset={handleReset}
+      />
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-          <div className="space-y-1.5">
-            <label className="text-xs font-semibold uppercase tracking-wider text-[var(--text-muted)]">
-              Genre
-            </label>
-            <div className="h-11 rounded-xl bg-[var(--surface-2)] border border-[var(--border)] px-4 flex items-center text-sm text-[var(--text)]">
-              Comedy (35)
-            </div>
+      {/* Dev-only TMDB query parameters inspector */}
+      {import.meta.env.DEV && (
+        <div
+          role="region"
+          aria-label="Developer Parameters Inspector"
+          className="rounded-xl bg-black/70 border border-white/10 px-4 py-2.5 flex items-center justify-between text-xs text-[var(--gold)] font-mono overflow-x-auto gap-4"
+        >
+          <div className="flex items-center gap-2 shrink-0 text-[11px] uppercase tracking-wider text-[var(--text-muted)]">
+            <Terminal className="w-3.5 h-3.5" />
+            <span>DEV Inspector</span>
           </div>
-
-          <div className="space-y-1.5">
-            <label className="text-xs font-semibold uppercase tracking-wider text-[var(--text-muted)]">
-              Release Year
-            </label>
-            <div className="h-11 rounded-xl bg-[var(--surface-2)] border border-[var(--border)] px-4 flex items-center text-sm text-[var(--text)]">
-              2025
-            </div>
-          </div>
-
-          <div className="space-y-1.5">
-            <label className="text-xs font-semibold uppercase tracking-wider text-[var(--text-muted)]">
-              Minimum Rating
-            </label>
-            <div className="h-11 rounded-xl bg-[var(--surface-2)] border border-[var(--border)] px-4 flex items-center text-sm text-[var(--text)]">
-              ★ 7.0 & above
-            </div>
-          </div>
-
-          <div className="space-y-1.5">
-            <label className="text-xs font-semibold uppercase tracking-wider text-[var(--text-muted)]">
-              Sort By
-            </label>
-            <div className="h-11 rounded-xl bg-[var(--surface-2)] border border-[var(--border)] px-4 flex items-center text-sm text-[var(--text)]">
-              Most Popular
-            </div>
+          <div className="truncate text-right">
+            <span className="text-[var(--text-muted)]">TMDB Request: </span>
+            <span className="text-white select-all">
+              /discover/movie?
+              {new URLSearchParams(
+                tmdbQueryParams as Record<string, string>
+              ).toString()}
+            </span>
           </div>
         </div>
+      )}
 
-        <div className="flex justify-end pt-2">
-          <Button variant="secondary" size="sm" icon={<Filter className="w-4 h-4" />}>
-            Reset to Defaults
-          </Button>
-        </div>
-      </div>
+      {/* Results Section Anchor */}
+      <div ref={resultsTopRef} className="pt-2">
+        {/* Results Bar */}
+        <div className="flex items-center justify-between pb-4 mb-6 border-b border-[var(--border)]">
+          <div className="flex items-center gap-2 text-xs sm:text-sm text-[var(--text-muted)]">
+            <Sparkles className="w-4 h-4 text-[var(--gold)]" />
+            {loading ? (
+              <span>Scanning catalog...</span>
+            ) : (
+              <span>
+                Found{' '}
+                <strong className="text-white tabular-nums font-semibold">
+                  {totalResults.toLocaleString()}
+                </strong>{' '}
+                curated movies
+              </span>
+            )}
+          </div>
 
-      <Divider />
-
-      {/* Grid Placeholder */}
-      <div>
-        <div className="flex items-center justify-between mb-6">
-          <span className="text-sm text-[var(--text-muted)]">
-            Showing curated results (Active in Phase 3)
-          </span>
-          <div className="flex items-center gap-2 text-xs text-[var(--text-muted)]">
-            <ArrowUpDown className="w-3.5 h-3.5" />
-            <span>Sorted by popularity</span>
+          <div className="text-xs text-[var(--text-muted)] tabular-nums">
+            Page {currentPage} of {totalPages}
           </div>
         </div>
 
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4 sm:gap-6">
-          {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12].map((idx) => (
-            <div
-              key={idx}
-              className="rounded-2xl border border-[var(--border)] bg-[var(--surface)] overflow-hidden aspect-[2/3] flex flex-col justify-end p-4 relative group hover:border-[var(--border-strong)] transition-all"
-            >
-              <div className="absolute inset-0 bg-gradient-to-t from-[var(--bg)] via-transparent to-transparent opacity-80" />
-              <div className="relative z-10 space-y-1">
-                <span className="text-[10px] uppercase font-semibold text-[var(--gold)]">
-                  ★ 7.{idx % 10}
-                </span>
-                <p className="font-serif text-sm font-semibold text-[var(--text)] truncate">
-                  Film Discovery #{idx}
-                </p>
-                <p className="text-xs text-[var(--text-muted)]">2025 · Comedy</p>
-              </div>
-            </div>
-          ))}
-        </div>
+        {/* Dynamic States: Loading, Error, Empty, or Results Grid */}
+        {loading ? (
+          <LoadingSkeleton variant="card-grid" count={12} />
+        ) : error ? (
+          <ErrorState error={error} onRetry={retry} />
+        ) : !moviesData || moviesData.results.length === 0 ? (
+          <EmptyState
+            icon={<Compass className="w-10 h-10" />}
+            title="No Matching Films Found"
+            description="No films matched your active filter parameters. Try expanding your release year range or lowering the minimum rating threshold."
+            action={
+              <Button onClick={handleReset} size="md">
+                Reset All Filters
+              </Button>
+            }
+          />
+        ) : (
+          <div className="space-y-8">
+            <MovieGrid movies={moviesData.results} />
+
+            {/* Pagination Controls */}
+            {totalPages > 1 && (
+              <Pagination
+                currentPage={currentPage}
+                totalPages={totalPages}
+                onPageChange={handlePageChange}
+                disabled={loading}
+              />
+            )}
+          </div>
+        )}
       </div>
     </div>
   )
