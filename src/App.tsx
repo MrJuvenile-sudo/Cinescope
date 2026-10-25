@@ -8,6 +8,7 @@ const Home = React.lazy(() => import('./pages/Home').then((m) => ({ default: m.H
 const Discover = React.lazy(() => import('./pages/Discover').then((m) => ({ default: m.Discover })))
 const Search = React.lazy(() => import('./pages/Search').then((m) => ({ default: m.Search })))
 const MovieDetails = React.lazy(() => import('./pages/MovieDetails').then((m) => ({ default: m.MovieDetails })))
+const Mid = React.lazy(() => import('./pages/Mid').then((m) => ({ default: m.Mid })))
 const Watchlist = React.lazy(() => import('./pages/Watchlist').then((m) => ({ default: m.Watchlist })))
 const About = React.lazy(() => import('./pages/About').then((m) => ({ default: m.About })))
 const Contact = React.lazy(() => import('./pages/Contact').then((m) => ({ default: m.Contact })))
@@ -21,6 +22,7 @@ export const App: React.FC = () => {
           <Route path="/" element={<Layout />}>
             <Route index element={<Home />} />
             <Route path="discover" element={<Discover />} />
+            <Route path="mid" element={<Mid />} />
             <Route path="search" element={<Search />} />
             <Route path="movie/:movieId" element={<MovieDetails />} />
             <Route path="watchlist" element={<Watchlist />} />

@@ -95,6 +95,29 @@ export const Header: React.FC = () => {
             </NavLink>
 
             <NavLink
+              to="/mid"
+              className={({ isActive }) =>
+                `relative flex items-center gap-1.5 h-full text-sm font-medium transition-colors duration-150 ${
+                  isActive
+                    ? 'text-white font-semibold'
+                    : 'text-[var(--text-muted)] hover:text-white'
+                }`
+              }
+            >
+              {({ isActive }) => (
+                <>
+                  <span>MID</span>
+                  <span className="px-1.5 py-0.5 text-[10px] font-bold rounded-md bg-[var(--primary)] text-white shadow-[var(--shadow-glow-red)]">
+                    18+
+                  </span>
+                  {isActive && (
+                    <span className="absolute bottom-0 left-0 right-0 h-[2px] bg-gradient-to-r from-[var(--primary)] to-[var(--primary-hover)] rounded-full shadow-[0_0_8px_rgba(229,9,20,0.6)] animate-fade-in" />
+                  )}
+                </>
+              )}
+            </NavLink>
+
+            <NavLink
               to="/watchlist"
               className={({ isActive }) =>
                 `relative flex items-center gap-2 h-full text-sm font-medium transition-colors duration-150 ${

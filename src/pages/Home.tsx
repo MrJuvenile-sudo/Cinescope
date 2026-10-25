@@ -1,6 +1,6 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
-import { Bookmark, Compass } from 'lucide-react'
+import { Bookmark, Compass, Flame } from 'lucide-react'
 import { useDocumentTitle } from '../hooks/useDocumentTitle'
 import { useTmdbQuery } from '../hooks/useTmdbQuery'
 import { getTrending, getPopular, getTopRated } from '../services/movieService'
@@ -148,6 +148,30 @@ export const Home: React.FC = () => {
         error={topRatedError}
         onRetry={retryTopRated}
       />
+
+      <Divider />
+
+      {/* MID 18+ Cinema Spotlight Banner */}
+      <section aria-label="MID 18+ Cinema Spotlight" className="relative rounded-3xl overflow-hidden border border-[var(--primary)]/30 bg-gradient-to-r from-[rgba(229,9,20,0.16)] via-[rgba(20,20,26,0.95)] to-[rgba(10,10,13,0.95)] p-6 sm:p-10 shadow-2xl">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6 relative z-10">
+          <div className="space-y-2 max-w-xl">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[var(--primary)] text-white text-xs font-bold uppercase tracking-widest shadow-[var(--shadow-glow-red)]">
+              <span>🔞 18+ Adult Cinema</span>
+            </div>
+            <h3 className="font-serif text-2xl sm:text-3xl font-bold text-white">
+              Step Into the MID Vault
+            </h3>
+            <p className="text-sm text-[var(--text-muted)] leading-relaxed">
+              Explore uncut, provocative R-rated and NC-17 films, psychological thrillers, and dark mature productions curated for adult audiences.
+            </p>
+          </div>
+          <Link to="/mid" className="shrink-0">
+            <Button size="lg" icon={<Flame className="w-4 h-4 text-white" />}>
+              Explore MID (18+)
+            </Button>
+          </Link>
+        </div>
+      </section>
 
       <Divider />
 

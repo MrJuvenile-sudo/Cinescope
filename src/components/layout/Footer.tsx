@@ -48,6 +48,7 @@ export const Footer: React.FC = () => {
               {[
                 { to: '/', label: 'Home' },
                 { to: '/discover', label: 'Discover Movies' },
+                { to: '/mid', label: 'MID (18+ Cinema)' },
                 { to: '/search', label: 'Search' },
                 { to: '/watchlist', label: 'Your Watchlist' },
               ].map(({ to, label }) => (

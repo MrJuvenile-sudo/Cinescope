@@ -13,7 +13,8 @@ import { ErrorState } from '../components/common/ErrorState'
 import { Rating } from '../components/common/Rating'
 import { Button } from '../components/common/Button'
 import { WatchlistButton } from '../components/movie/WatchlistButton'
-import { TrailerButton } from '../components/movie/TrailerButton'
+import { MovieWatchDownloadButtons } from '../components/movie/MovieWatchDownloadButtons'
+import { MoviePicturesGallery } from '../components/movie/MoviePicturesGallery'
 import { CastList } from '../components/movie/CastList'
 import { MovieRow } from '../components/movie/MovieRow'
 
@@ -259,15 +260,10 @@ export const MovieDetails: React.FC = () => {
                 </div>
               )}
 
-              {/* Action Buttons: Watchlist & Trailer */}
-              <div className="flex flex-wrap items-center gap-4 pt-2">
+              {/* Action Buttons: Watch Now, Download & Watchlist */}
+              <div className="flex flex-wrap items-center gap-3.5 pt-2">
+                <MovieWatchDownloadButtons movie={movie} />
                 <WatchlistButton movie={movie} variant="button" size="lg" />
-                <TrailerButton
-                  videos={movie.videos?.results}
-                  movieTitle={movie.title}
-                  size="lg"
-                  variant="primary"
-                />
               </div>
 
               {/* Synopsis / Overview */}
@@ -288,6 +284,14 @@ export const MovieDetails: React.FC = () => {
 
       {/* Main Dossier Sections */}
       <div className="max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-10 space-y-16">
+        {/* Movie Pictures & Scene Stills Gallery */}
+        {movie.images?.backdrops && movie.images.backdrops.length > 0 && (
+          <MoviePicturesGallery
+            images={movie.images.backdrops}
+            movieTitle={movie.title}
+          />
+        )}
+
         {/* Cast Section (hidden automatically if empty) */}
         {movie.credits?.cast && movie.credits.cast.length > 0 && (
           <CastList cast={movie.credits.cast} />

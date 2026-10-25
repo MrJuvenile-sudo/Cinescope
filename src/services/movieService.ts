@@ -116,7 +116,7 @@ export async function searchMovies(
 }
 
 /**
- * Fetches single movie dossier with appended credits, videos, and similar movies in ONE request.
+ * Fetches single movie dossier with appended credits, videos, similar movies, and scene images in ONE request.
  */
 export async function getMovieDetails(
   movieId: string | number,
@@ -126,9 +126,57 @@ export async function getMovieDetails(
   return request<MovieDetails>(
     `/movie/${movieId}`,
     {
-      append_to_response: 'credits,videos,similar',
+      append_to_response: 'credits,videos,similar,images',
       language: 'en-US',
+      include_image_language: 'en,null',
     },
+    signal,
+    bypassCache
+  )
+}
+
+/**
+ * Fetches MID (Midnight / 18+ / Mature Audiences) movies:
+ * Covers 18+, R-rated, NC-17, explicit, and mature cinematic productions.
+ */
+export async function getMidMovies(
+  page = 1,
+  subCategory = 'all',
+  sort = 'popularity.desc',
+  signal?: AbortSignal,
+  bypassCache = false
+): Promise<Paginated<Movie>> {
+  const baseParams: Record<string, string | number | boolean | undefined> = {
+    language: 'en-US',
+    include_adult: true,
+    sort_by: sort,
+    page,
+  }
+
+  if (subCategory === 'horror') {
+    baseParams.with_genres = '27'
+    baseParams.certification_country = 'US'
+    baseParams.certification = 'R|NC-17'
+  } else if (subCategory === 'thriller') {
+    baseParams.with_genres = '53,80'
+    baseParams.certification_country = 'US'
+    baseParams.certification = 'R|NC-17'
+  } else if (subCategory === 'drama') {
+    baseParams.with_genres = '18,10749'
+    baseParams.certification_country = 'US'
+    baseParams.certification = 'R|NC-17'
+  } else if (subCategory === 'explicit') {
+    baseParams.include_adult = true
+    baseParams.certification_country = 'US'
+    baseParams.certification = 'NC-17'
+  } else {
+    baseParams.certification_country = 'US'
+    baseParams.certification = 'R|NC-17'
+  }
+
+  return request<Paginated<Movie>>(
+    '/discover/movie',
+    baseParams,
     signal,
     bypassCache
   )

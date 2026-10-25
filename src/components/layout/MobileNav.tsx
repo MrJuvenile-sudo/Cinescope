@@ -140,6 +140,26 @@ export const MobileNav: React.FC<MobileNavProps> = ({
             </NavLink>
 
             <NavLink
+              to="/mid"
+              onClick={onClose}
+              className={({ isActive }) =>
+                `flex items-center justify-between px-4 py-3 rounded-xl text-base font-medium transition-colors min-h-[44px] ${
+                  isActive
+                    ? 'bg-[rgba(229,9,20,0.15)] text-white border border-[var(--primary)]/40 font-semibold'
+                    : 'text-[var(--text-muted)] hover:text-white hover:bg-white/5'
+                }`
+              }
+            >
+              <div className="flex items-center gap-3">
+                <span className="text-base">🔥</span>
+                <span>MID (18+)</span>
+              </div>
+              <span className="px-1.5 py-0.5 text-[10px] font-bold rounded-md bg-[var(--primary)] text-white shadow-[var(--shadow-glow-red)]">
+                18+
+              </span>
+            </NavLink>
+
+            <NavLink
               to="/search"
               onClick={onClose}
               className={({ isActive }) =>

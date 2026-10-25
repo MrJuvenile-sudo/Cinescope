@@ -57,6 +57,15 @@ export interface Video {
   published_at?: string
 }
 
+export interface ImageItem {
+  file_path: string
+  width: number
+  height: number
+  aspect_ratio?: number
+  vote_average?: number
+  vote_count?: number
+}
+
 export interface MovieDetails extends Movie {
   tagline: string | null
   runtime: number | null
@@ -72,6 +81,11 @@ export interface MovieDetails extends Movie {
   }
   videos?: {
     results: Video[]
+  }
+  images?: {
+    backdrops: ImageItem[]
+    posters: ImageItem[]
+    logos?: ImageItem[]
   }
   similar?: Paginated<Movie>
 }
