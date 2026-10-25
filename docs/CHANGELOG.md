@@ -170,3 +170,14 @@ Format: ## YYYY-MM-DD — Phase N — title / Files changed / What was built / H
   - `npm test` passed (91 tests passing across 17 test suites).
   - `npm run build` passed (production bundle compiled cleanly).
   - Live TMDB queries verified via proxy returning 20 live 18+ titles and over 100 scene pictures for movie titles.
+
+## 2026-10-25 — Single-Page History Back Navigation
+- Files changed:
+  - `src/pages/MovieDetails.tsx`: Replaced hardcoded `/discover` navigation with smart `handleBack` executing `navigate(-1)` across loading, loaded, and invalid ID states.
+  - `src/pages/MovieDetails.test.tsx`: Added unit test verifying back button execution.
+- What was built:
+  - When clicking "← Back" on any movie page, the user is navigated back exactly one single screen page in their session history (whether they came from Home, Discover with filters, Search results, MID 18+, or Watchlist), with full filter and scroll state intact without resetting categories.
+- How verified:
+  - `npm run typecheck` passed (0 errors).
+  - `npm test` passed (all 92 tests passing).
+  - `npm run build` passed.
