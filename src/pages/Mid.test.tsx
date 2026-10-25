@@ -57,9 +57,9 @@ describe('MID 18+ Page', () => {
     // Verify 18+ advisory banner
     expect(screen.getByText(/18\+ Mature Audience Advisory/i)).toBeInTheDocument()
     expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent(/MID/i)
-    expect(screen.getByText('All 18+ Cinema')).toBeInTheDocument()
-    expect(screen.getByText('18+ Thriller & Crime')).toBeInTheDocument()
-    expect(screen.getByText('18+ Horror & Dark')).toBeInTheDocument()
+    expect(screen.getByText('All 18+ (Erotic & Sexual)')).toBeInTheDocument()
+    expect(screen.getByText('18+ Nude & Sensual')).toBeInTheDocument()
+    expect(screen.getByText('18+ Sexual & Erotica')).toBeInTheDocument()
 
     // Verify movies loaded
     await waitFor(() => {
@@ -85,12 +85,12 @@ describe('MID 18+ Page', () => {
       expect(screen.getByText('Midnight Sinners')).toBeInTheDocument()
     })
 
-    // Click on 18+ Horror & Dark chip
-    const horrorChip = screen.getByText('18+ Horror & Dark')
-    fireEvent.click(horrorChip)
+    // Click on 18+ Nude & Sensual chip
+    const nudeChip = screen.getByText('18+ Nude & Sensual')
+    fireEvent.click(nudeChip)
 
     await waitFor(() => {
-      expect(getMidSpy).toHaveBeenCalledWith(1, 'horror', 'popularity.desc', expect.any(AbortSignal), false)
+      expect(getMidSpy).toHaveBeenCalledWith(1, 'nude', 'popularity.desc', expect.any(AbortSignal), false)
     })
   })
 })

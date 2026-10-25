@@ -10,14 +10,14 @@ import { LoadingSkeleton } from '../components/common/LoadingSkeleton'
 import { ErrorState } from '../components/common/ErrorState'
 import { Chip } from '../components/common/Chip'
 
-type MidSubCategory = 'all' | 'thriller' | 'horror' | 'drama' | 'explicit'
+type MidSubCategory = 'all' | 'nude' | 'sexual' | 'thriller' | 'explicit'
 
 const SUB_CATEGORIES: { id: MidSubCategory; label: string; emoji: string }[] = [
-  { id: 'all', label: 'All 18+ Cinema', emoji: '🔥' },
-  { id: 'thriller', label: '18+ Thriller & Crime', emoji: '🔪' },
-  { id: 'horror', label: '18+ Horror & Dark', emoji: '🩸' },
-  { id: 'drama', label: '18+ Mature Drama', emoji: '🍷' },
-  { id: 'explicit', label: 'NC-17 & Unrated', emoji: '🔞' },
+  { id: 'all', label: 'All 18+ (Erotic & Sexual)', emoji: '🔥' },
+  { id: 'nude', label: '18+ Nude & Sensual', emoji: '🔞' },
+  { id: 'sexual', label: '18+ Sexual & Erotica', emoji: '💋' },
+  { id: 'thriller', label: '18+ Erotic Thrillers', emoji: '🔪' },
+  { id: 'explicit', label: 'NC-17 Uncut', emoji: '🚫' },
 ]
 
 const SORT_OPTIONS = [
@@ -63,17 +63,17 @@ export const Mid: React.FC = () => {
               <span>18+ Mature Audience Advisory</span>
             </div>
             <h1 className="font-serif text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight text-white leading-tight">
-              MID <span className="text-[var(--primary)]">Midnight Cinema</span>
+              MID <span className="text-[var(--primary)]">18+ Erotic Cinema</span>
             </h1>
             <p className="text-sm sm:text-base text-[var(--text-muted)] leading-relaxed">
-              Curated mature content, R-rated masterworks, NC-17 provocative narratives, psychological thrillers, and uncut cinema from international auteurs.
+              Curated 18+ adult cinema, erotic narratives, nude and sensual art, sexually explicit films, and uncut R/NC-17 productions from international cinema.
             </p>
           </div>
 
           <div className="flex items-center gap-2 p-3 rounded-2xl bg-[var(--surface-2)] border border-[var(--border)] shrink-0 select-none">
             <Flame className="w-5 h-5 text-[var(--primary)] animate-pulse" />
             <span className="text-xs font-semibold uppercase tracking-wider text-[var(--gold)]">
-              Explicit & Uncut
+              18+ Erotic & Nude
             </span>
           </div>
         </div>

@@ -135,9 +135,15 @@ export async function getMovieDetails(
   )
 }
 
+// Curated TMDB adult keyword IDs for 18+ erotic, nude, and sexual cinema
+const EROTIC_KEYWORDS = '207767|155477|246601|256466|325693|41404|381106'
+const NUDE_KEYWORDS = '246601|281741|362757|41260|193724|327109|239225'
+const SEXUAL_KEYWORDS = '256466|325693|41404|381106|298666'
+const THRILLER_KEYWORDS = '207767|256466'
+
 /**
- * Fetches MID (Midnight / 18+ / Mature Audiences) movies:
- * Covers 18+, R-rated, NC-17, explicit, and mature cinematic productions.
+ * Fetches MID (18+ Adult / Erotic / Sexual / Nude Cinema) movies:
+ * Specifically targets 18+ content, nudity, sexual cinema, and erotic thrillers.
  */
 export async function getMidMovies(
   page = 1,
@@ -149,29 +155,24 @@ export async function getMidMovies(
   const baseParams: Record<string, string | number | boolean | undefined> = {
     language: 'en-US',
     include_adult: true,
+    certification_country: 'US',
+    certification: 'R|NC-17',
     sort_by: sort,
     page,
   }
 
-  if (subCategory === 'horror') {
-    baseParams.with_genres = '27'
-    baseParams.certification_country = 'US'
-    baseParams.certification = 'R|NC-17'
+  if (subCategory === 'nude') {
+    baseParams.with_keywords = NUDE_KEYWORDS
+  } else if (subCategory === 'sexual') {
+    baseParams.with_keywords = SEXUAL_KEYWORDS
   } else if (subCategory === 'thriller') {
-    baseParams.with_genres = '53,80'
-    baseParams.certification_country = 'US'
-    baseParams.certification = 'R|NC-17'
-  } else if (subCategory === 'drama') {
-    baseParams.with_genres = '18,10749'
-    baseParams.certification_country = 'US'
-    baseParams.certification = 'R|NC-17'
+    baseParams.with_keywords = THRILLER_KEYWORDS
+    baseParams.with_genres = '53'
   } else if (subCategory === 'explicit') {
-    baseParams.include_adult = true
-    baseParams.certification_country = 'US'
     baseParams.certification = 'NC-17'
   } else {
-    baseParams.certification_country = 'US'
-    baseParams.certification = 'R|NC-17'
+    // Default 'all': All 18+ erotic, sexual, and nude titles
+    baseParams.with_keywords = EROTIC_KEYWORDS
   }
 
   return request<Paginated<Movie>>(
