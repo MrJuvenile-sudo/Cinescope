@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react'
-import { useParams, Link } from 'react-router-dom'
+import { useParams, Link, useNavigate } from 'react-router-dom'
 import { Film, Calendar, Clock, ArrowLeft, Clapperboard, Compass } from 'lucide-react'
 import { useDocumentTitle } from '../hooks/useDocumentTitle'
 import { useTmdbQuery } from '../hooks/useTmdbQuery'
@@ -20,9 +20,21 @@ import { MovieRow } from '../components/movie/MovieRow'
 
 export const MovieDetails: React.FC = () => {
   const { movieId } = useParams<{ movieId: string }>()
+  const navigate = useNavigate()
 
   // Validate numeric ID: must be non-empty digits
   const isValidId = Boolean(movieId && /^\d+$/.test(movieId))
+
+  const handleBack = () => {
+    // Navigate back exactly 1 single screen page in history
+    if (window.history.state && typeof window.history.state.idx === 'number' && window.history.state.idx > 0) {
+      navigate(-1)
+    } else if (window.history.length > 1) {
+      navigate(-1)
+    } else {
+      navigate('/')
+    }
+  }
 
   // Scroll to top on movie ID change
   useEffect(() => {
@@ -57,7 +69,15 @@ export const MovieDetails: React.FC = () => {
           title="Scene Not Found"
           description="The requested movie identifier is not valid. Please select a valid title from the catalog."
         />
-        <div className="mt-8 flex justify-center">
+        <div className="mt-8 flex justify-center gap-3">
+          <button
+            type="button"
+            onClick={handleBack}
+            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl border border-[var(--border)] text-sm font-medium text-white hover:bg-white/10 cursor-pointer"
+          >
+            <ArrowLeft className="w-4 h-4" />
+            <span>Go Back</span>
+          </button>
           <Link to="/discover">
             <Button size="md" icon={<Compass className="w-4 h-4" />}>
               Explore Catalog
@@ -73,13 +93,15 @@ export const MovieDetails: React.FC = () => {
     return (
       <div className="py-6">
         <div className="max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-10 mb-6">
-          <Link
-            to="/discover"
-            className="inline-flex items-center gap-2 text-xs sm:text-sm font-medium text-[var(--gold)] hover:text-white transition-colors"
+          <button
+            type="button"
+            onClick={handleBack}
+            aria-label="Back to previous page"
+            className="inline-flex items-center gap-2 text-xs sm:text-sm font-medium text-[var(--gold)] hover:text-white transition-colors cursor-pointer select-none py-1.5 px-3 -ml-3 rounded-xl bg-white/5 hover:bg-white/10 border border-[var(--border)] hover:border-[var(--gold)]/40"
           >
             <ArrowLeft className="w-4 h-4" />
-            <span>Back to Discover</span>
-          </Link>
+            <span>Back</span>
+          </button>
         </div>
         <LoadingSkeleton variant="details" />
       </div>
@@ -144,13 +166,15 @@ export const MovieDetails: React.FC = () => {
         <div className="relative z-10 max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-10 py-8 sm:py-12 space-y-8">
           {/* Breadcrumb / Back Link */}
           <div>
-            <Link
-              to="/discover"
-              className="inline-flex items-center gap-2 text-xs sm:text-sm font-medium text-[var(--gold)] hover:text-white transition-colors"
+            <button
+              type="button"
+              onClick={handleBack}
+              aria-label="Back to previous page"
+              className="inline-flex items-center gap-2 text-xs sm:text-sm font-medium text-[var(--gold)] hover:text-white transition-colors cursor-pointer select-none py-1.5 px-3 -ml-3 rounded-xl bg-white/5 hover:bg-white/10 border border-[var(--border)] hover:border-[var(--gold)]/40"
             >
               <ArrowLeft className="w-4 h-4" />
-              <span>Back to Discover</span>
-            </Link>
+              <span>Back</span>
+            </button>
           </div>
 
           {/* Dossier Grid */}

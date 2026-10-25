@@ -193,4 +193,15 @@ describe('MovieDetails Page', () => {
     expect(await screen.findByRole('heading', { level: 1, name: 'Fight Club' })).toBeInTheDocument()
     expect(detailsSpy).toHaveBeenCalledTimes(2)
   })
+
+  it('navigates back to previous screen when clicking the back button', async () => {
+    vi.spyOn(movieService, 'getMovieDetails').mockResolvedValue(mockMovie)
+
+    renderMovieDetails('550')
+
+    await screen.findByRole('heading', { level: 1, name: 'Fight Club' })
+    const backBtn = screen.getByRole('button', { name: /Back/i })
+    expect(backBtn).toBeInTheDocument()
+    fireEvent.click(backBtn)
+  })
 })
