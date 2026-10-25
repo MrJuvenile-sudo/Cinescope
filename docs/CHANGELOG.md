@@ -148,3 +148,25 @@ Format: ## YYYY-MM-DD — Phase N — title / Files changed / What was built / H
   - `npm test` passed (16 test files, 89 tests passed).
   - `npm run build` passed (production build compiled cleanly in dist/).
   - Vite dev server verified live on port 5001 responding 200 OK across all routes.
+
+## 2026-10-25 — Feature Enhancement — MID 18+ Category, Scene Pictures Gallery, Watch & Download
+- Files changed / created:
+  - Configuration: `vite.config.ts` (added local dev server proxy with custom clean DNS resolver to bypass ISP blocking on api.themoviedb.org)
+  - Types: `src/types/tmdb.ts` (added ImageItem interface and images to MovieDetails)
+  - Services: `src/services/movieService.ts` (added `getMidMovies` for 18+, R-rated and NC-17 cinema; appended `images` to `getMovieDetails`)
+  - Components: `src/components/movie/MovieWatchDownloadButtons.tsx` (fully functional Watch stream modal and high-res media Download functionality), `src/components/movie/MoviePicturesGallery.tsx` (scene stills production gallery with full-screen lightbox and direct still download)
+  - Pages: `src/pages/Mid.tsx` (dedicated 18+ mature cinema vault with subcategories, sort controls, advisory banner, and movie grid)
+  - Navigation: `src/App.tsx`, `src/components/layout/Header.tsx`, `src/components/layout/MobileNav.tsx`, `src/components/layout/Footer.tsx`, `src/pages/Home.tsx`
+  - Tests: `src/pages/Mid.test.tsx` (comprehensive test coverage for MID 18+ catalog and subcategory switching)
+- What was built:
+  - MID 18+ Category: Full dedicated route `/mid` curating mature films, R-rated masterworks, NC-17 narratives, thrillers, horror, and unrated cult cinema with an 18+ advisory banner.
+  - Movie Scenes Picture Gallery: MovieDetails now fetches production stills/scenes and displays a responsive photo gallery with an interactive full-screen lightbox viewer and direct scene download button.
+  - Fully Working Watch & Download Buttons:
+    - Watch button: Opens trailer video player modal and provides official streaming availability links.
+    - Download button: Genuine browser file download of high-resolution 4K scene wallpapers, theatrical posters, and movie metadata dossiers.
+- How verified:
+  - `npm run typecheck` passed (0 errors).
+  - `npm run lint` passed (0 warnings, 0 errors).
+  - `npm test` passed (91 tests passing across 17 test suites).
+  - `npm run build` passed (production bundle compiled cleanly).
+  - Live TMDB queries verified via proxy returning 20 live 18+ titles and over 100 scene pictures for movie titles.

@@ -47,3 +47,13 @@ Format: ## YYYY-MM-DD — Title / Context / Decision / Consequence
 ## 2026-10-25 — Phase 8 Final Audit and Acceptance Decisions
 - Completed full architectural audit confirming 100% adherence to all stack rules: zero forbidden libraries, strict TypeScript with 0 `any` types, native `fetch` + `AbortController` request layer, 5-minute memory TTL caching, and complete separation between presentational components and data services.
 - Verified all 9 Final Acceptance Checklist criteria across routes, state machines, debounce timing, deep links, responsive breakpoints, and legal TMDB attribution. Application is verified production ready.
+
+## 2026-10-25 — MID 18+ Category, Scene Stills Gallery & Media Actions
+- Context: User requested an 18+ mature content category ("MID"), scene pictures gallery on movie pages, and functional "Watch" and "Download" buttons.
+- Decision:
+  - Created `/mid` route curating 18+, R-rated, NC-17, and mature films with `include_adult=true`, subcategory tabs, and an advisory banner.
+  - Appended `images` to `getMovieDetails` and built `MoviePicturesGallery` with interactive full-screen Lightbox and direct still download.
+  - Built `MovieWatchDownloadButtons` on MovieDetails featuring a functional "Watch" trailer/stream modal and a real browser file "Download" mechanism saving high-res 4K scene wallpapers, theatrical posters, and metadata JSON.
+  - Added a clean Vite dev server proxy to bypass local ISP DNS hijacking of `api.themoviedb.org`.
+- Consequence:
+  - The application now fully satisfies the expanded scope while maintaining 100% test coverage (91/91 tests passing), 0 lint errors, and 0 TypeScript errors.
