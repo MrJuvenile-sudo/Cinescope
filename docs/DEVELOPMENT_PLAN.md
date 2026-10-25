@@ -1,9 +1,9 @@
 # CineScope — Development Plan & Status
 Legend: [ ] todo | [~] in progress | [x] done. Update after EVERY task.
 
-## Current phase: Phase 7
-## Last completed task: Phase 6 — About, Contact, and NotFound pages (89 unit tests)
-## Next 3 tasks: Route lazy loading & Suspense, accessible motion & SEO metadata, comprehensive README with screenshots & architecture
+## Current phase: Phase 8
+## Last completed task: Phase 7 — Polish (React.lazy route code-splitting, accessible PageLoader, SEO metadata, comprehensive README)
+## Next 3 tasks: Final comprehensive audit against brief, verification of all edge cases, final checklist completion
 
 - [x] Phase 0 — Bootstrap: AGENTS.md, .agents/rules, .agents/workflows, /docs
 - [x] Phase 1 — Scaffold & foundation: Vite React-TS app, Tailwind, Vitest, tokens/fonts/atmosphere, Button/Chip/SectionHeading, Layout/Header/MobileNav/Footer, all routes with premium placeholders, SPA rewrites, .env.example
@@ -12,7 +12,7 @@ Legend: [ ] todo | [~] in progress | [x] done. Update after EVERY task.
 - [x] Phase 4 — Home & Search: hero, rows, genre chips, watchlist strip; debounced Search + header SearchBar
 - [x] Phase 5 — Details & Watchlist pages
 - [x] Phase 6 — About, Contact, NotFound
-- [ ] Phase 7 — Polish: motion, lazy routes, a11y audit, SEO meta, responsive QA, README
+- [x] Phase 7 — Polish: motion, lazy routes, a11y audit, SEO meta, responsive QA, README
 - [ ] Phase 8 — Audit, fixes, deployment, final checklist
 
 ## Final acceptance checklist

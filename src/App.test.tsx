@@ -23,11 +23,11 @@ describe('App Smoke Test', () => {
     ).toBeInTheDocument()
   })
 
-  it('renders 404 Scene Not Found for unmatched routes', () => {
+  it('renders 404 Scene Not Found for unmatched routes', async () => {
     // Direct test with history or render
     window.history.pushState({}, '', '/non-existent-reel')
     render(<App />)
 
-    expect(screen.getByRole('heading', { name: /Scene Not Found/i })).toBeInTheDocument()
+    expect(await screen.findByRole('heading', { name: /Scene Not Found/i })).toBeInTheDocument()
   })
 })

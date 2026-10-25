@@ -1,9 +1,10 @@
-import React from 'react'
+import React, { Suspense } from 'react'
 import { Outlet } from 'react-router-dom'
 import { Toaster } from 'sonner'
 import { Header } from './Header'
 import { Footer } from './Footer'
 import { ScrollToTop } from './ScrollToTop'
+import { PageLoader } from '../common/PageLoader'
 
 export const Layout: React.FC = () => {
   return (
@@ -24,7 +25,9 @@ export const Layout: React.FC = () => {
 
       {/* Main Content Landmark */}
       <main id="main-content" tabIndex={-1} className="flex-1 focus:outline-none">
-        <Outlet />
+        <Suspense fallback={<PageLoader />}>
+          <Outlet />
+        </Suspense>
       </main>
 
       {/* Global Footer */}

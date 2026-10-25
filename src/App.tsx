@@ -2,14 +2,16 @@ import React from 'react'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import { WatchlistProvider } from './context/WatchlistContext'
 import { Layout } from './components/layout/Layout'
-import { Home } from './pages/Home'
-import { Discover } from './pages/Discover'
-import { Search } from './pages/Search'
-import { MovieDetails } from './pages/MovieDetails'
-import { Watchlist } from './pages/Watchlist'
-import { About } from './pages/About'
-import { Contact } from './pages/Contact'
-import { NotFound } from './pages/NotFound'
+
+// Dynamic lazy imports for production bundle code-splitting
+const Home = React.lazy(() => import('./pages/Home').then((m) => ({ default: m.Home })))
+const Discover = React.lazy(() => import('./pages/Discover').then((m) => ({ default: m.Discover })))
+const Search = React.lazy(() => import('./pages/Search').then((m) => ({ default: m.Search })))
+const MovieDetails = React.lazy(() => import('./pages/MovieDetails').then((m) => ({ default: m.MovieDetails })))
+const Watchlist = React.lazy(() => import('./pages/Watchlist').then((m) => ({ default: m.Watchlist })))
+const About = React.lazy(() => import('./pages/About').then((m) => ({ default: m.About })))
+const Contact = React.lazy(() => import('./pages/Contact').then((m) => ({ default: m.Contact })))
+const NotFound = React.lazy(() => import('./pages/NotFound').then((m) => ({ default: m.NotFound })))
 
 export const App: React.FC = () => {
   return (

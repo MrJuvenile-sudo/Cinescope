@@ -39,3 +39,7 @@ Format: ## YYYY-MM-DD — Title / Context / Decision / Consequence
 - Implemented accessible field-level validation on `Contact.tsx` with `aria-invalid`, `aria-describedby`, and auto-focusing the first invalid field on form submission.
 - Preserved complete transparency on the contact form via an honest `mailto:` flow and explicit disclaimers confirming that no automated backend delivery or storage occurs.
 - Mapped all academic assignment criteria in `About.tsx` to live functional route links, alongside strict text-only TMDB legal attribution.
+
+## 2026-10-25 — Phase 7 Polish Decisions
+- Enforced route-level code splitting using `React.lazy()` with `<Suspense fallback={<PageLoader />}>` placed around `<Outlet />` inside `Layout.tsx`. This preserves header, footer, and navigation state persistently during asynchronous chunk loading while slashing initial JS bundle from 321 kB down to 226 kB (70 kB gzip).
+- Authored production-grade `README.md` containing the assignment requirements matrix, the complete Discover parameter mapping table, environment security instructions, and Antigravity memory workflow documentation.

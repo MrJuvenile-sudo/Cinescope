@@ -110,3 +110,20 @@ Format: ## YYYY-MM-DD — Phase N — title / Files changed / What was built / H
   - `npm test` passed (16 test files, 89 tests passed).
   - `npm run build` passed (production bundle compiled cleanly in dist/).
   - Vite dev server running on port 5001 responding 200 OK across `/`, `/about`, `/contact`, `/discover`, `/watchlist`.
+
+## 2026-10-25 — Phase 7 — Polish: motion, lazy routes, a11y audit, SEO meta, README
+- Files changed / created:
+  - Routing & Performance: src/App.tsx (converted 8 page routes to React.lazy dynamic imports), src/components/layout/Layout.tsx (wrapped Outlet in Suspense with PageLoader fallback), src/components/common/PageLoader.tsx (accessible clapperboard pulse loader)
+  - SEO & Head: index.html (Open Graph tags, Twitter Card metadata, theme-color #0A0A0D, keywords, preconnect font links)
+  - Documentation: README.md (complete rewrite with project architecture, Discover mapping table, assignment traceability matrix, setup guide, TMDB legal attribution)
+  - Tests: src/App.test.tsx (updated smoke test for async suspense rendering)
+- What was built:
+  - Full route-level code splitting dropping initial JS bundle size from 321 kB to 226 kB (70 kB gzip).
+  - Zero layout shift fallback loader during lazy chunk fetching.
+  - Comprehensive social meta tags and complete production README.
+- How verified:
+  - `npm run typecheck` passed (tsc --noEmit clean, 0 errors).
+  - `npm run lint` passed (eslint clean, 0 warnings, 0 errors).
+  - `npm test` passed (16 test files, 89 tests passed).
+  - `npm run build` passed (all 8 routes code-split into distinct chunks in dist/).
+  - Local server verified on port 5001 responding 200 OK across all routes.
