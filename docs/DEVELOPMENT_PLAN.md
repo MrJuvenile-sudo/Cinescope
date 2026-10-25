@@ -1,16 +1,16 @@
 # CineScope — Development Plan & Status
 Legend: [ ] todo | [~] in progress | [x] done. Update after EVERY task.
 
-## Current phase: Phase 5
-## Last completed task: Phase 4 — Home & Search (MovieHero, MovieRow, genre chips, watchlist strip, debounced Search, SearchBar, 68 unit tests)
-## Next 3 tasks: MovieDetails page (backdrop, credits, trailer modal, similar row), Watchlist page (sorting, clear confirmation, local state), browser verification
+## Current phase: Phase 6
+## Last completed task: Phase 5 — Movie Details dossier, Trailer modal, Cast list, and Watchlist management (79 unit tests)
+## Next 3 tasks: About page (story, stack cards, TMDB attribution), Contact page (validated form, mailto: flow), NotFound page (cinematic 404)
 
 - [x] Phase 0 — Bootstrap: AGENTS.md, .agents/rules, .agents/workflows, /docs
 - [x] Phase 1 — Scaffold & foundation: Vite React-TS app, Tailwind, Vitest, tokens/fonts/atmosphere, Button/Chip/SectionHeading, Layout/Header/MobileNav/Footer, all routes with premium placeholders, SPA rewrites, .env.example
 - [x] Phase 2 — Data & state: types, tmdbClient (typed errors, cache, abort), movieService, imageUrl/movieHelpers, hooks, WatchlistContext + header badge, LoadingSkeleton/ErrorState/EmptyState/Rating/Pagination, unit tests
 - [x] Phase 3 — Discover: discoverUrlState (+tests), MovieCard/MovieGrid, FilterPanel, URL-synced page with pagination and states, browser verification
 - [x] Phase 4 — Home & Search: hero, rows, genre chips, watchlist strip; debounced Search + header SearchBar
-- [ ] Phase 5 — Details & Watchlist pages
+- [x] Phase 5 — Details & Watchlist pages
 - [ ] Phase 6 — About, Contact, NotFound
 - [ ] Phase 7 — Polish: motion, lazy routes, a11y audit, SEO meta, responsive QA, README
 - [ ] Phase 8 — Audit, fixes, deployment, final checklist

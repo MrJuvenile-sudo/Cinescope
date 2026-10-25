@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import { ChevronRight } from 'lucide-react'
 
 export interface SectionHeadingProps {
+  id?: string
   eyebrow?: string
   eyebrowColor?: 'gold' | 'crimson'
   title: string
@@ -15,6 +16,7 @@ export interface SectionHeadingProps {
 }
 
 export const SectionHeading: React.FC<SectionHeadingProps> = ({
+  id,
   eyebrow,
   eyebrowColor = 'gold',
   title,
@@ -41,6 +43,7 @@ export const SectionHeading: React.FC<SectionHeadingProps> = ({
             </span>
           )}
           <HeadingTag
+            id={id}
             className={`font-serif tracking-[-0.02em] text-[var(--text)] ${
               as === 'h1'
                 ? 'text-[clamp(2.25rem,5vw,4.25rem)] font-bold leading-[1.05]'

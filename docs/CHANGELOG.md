@@ -80,3 +80,18 @@ Format: ## YYYY-MM-DD — Phase N — title / Files changed / What was built / H
   - `npm test` passed (11 test files, 68 tests passed).
   - `npm run build` passed (production bundle compiled cleanly in dist/).
   - Vite dev server tested for Home (`/`) and Search (`/search?q=Dune`) responding 200 OK.
+
+## 2026-10-25 — Phase 5 — Movie Details dossier, trailer modal, and Watchlist management
+- Files changed / created:
+  - Components: src/components/movie/CastList.tsx (top 12 billed cast, w185 profiles with initials fallback, responsive grid, hides if empty), src/components/movie/TrailerModal.tsx (accessible dialog, focus trap, Escape key listener, YouTube nocookie embed with external fallback), src/components/movie/TrailerButton.tsx (picks best trailer, primary/secondary/glass variants, auto-hides if no video), src/components/common/SectionHeading.tsx (added id prop for aria-labelledby bindings)
+  - Pages: src/pages/MovieDetails.tsx (strict numeric ID guard, single request via getMovieDetails with credits, videos, and similar appended, cinematic backdrop with dual gradients, w500 poster, tagline, runtime, rating, director, interactive genre badges linking to Discover, CastList, similar MovieRow, error and 404 recovery), src/pages/Watchlist.tsx (reads WatchlistContext, live count heading, client-side sorting by recently added / title / rating, responsive movie cards, accessible confirmation dialog for clear-all, premium empty state)
+  - Tests: src/pages/MovieDetails.test.tsx (5 tests), src/pages/Watchlist.test.tsx (6 tests)
+- What was built:
+  - Full-featured Movie Details dossier honoring all brief requirements and design tokens.
+  - Interactive trailer modal with privacy-conscious YouTube player and keyboard accessibility.
+  - Complete Watchlist view with multi-mode sorting, single item removal, and protected clear-all confirmation.
+- How verified:
+  - `npm run typecheck` passed (tsc --noEmit clean, 0 errors).
+  - `npm run lint` passed (eslint clean, 0 warnings, 0 errors).
+  - `npm test` passed (13 test files, 79 tests passed).
+  - `npm run build` passed (production build compiled in dist/ with 0 errors).

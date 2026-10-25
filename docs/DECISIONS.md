@@ -28,3 +28,9 @@ Format: ## YYYY-MM-DD — Title / Context / Decision / Consequence
 - Integrated compact SearchBar into Header to enable direct search submission from any screen.
 - MovieRow implemented with native keyboard accessibility (`tabIndex={0}`) and custom CSS scrollbar suppression while preserving smooth swipe navigation.
 - Configured screen-reader live announcements on `Search.tsx` via `role="status"` and `aria-live="polite"` announcing `"{n} results found for {query}"`.
+
+## 2026-10-25 — Phase 5 Movie Details and Watchlist Decisions
+- Validated `:movieId` route parameter with strict numeric pattern (`/^\d+$/`) prior to triggering `useTmdbQuery` to bypass wasted API traffic for malformed paths.
+- Rendered movie genres on Details as semantic interactive links directly pointing to parametric `/discover` with the genre preset and default filters.
+- Built an accessible `TrailerModal` using YouTube privacy-enhanced embed (`youtube-nocookie.com`), body scroll locking, Escape key dismissal, and an external direct fallback link.
+- Watchlist management equipped with reactive client-side sorting (Recently Added, Title A-Z, Highest Rated) and an accessible confirmation dialog (`role="alertdialog"`) protecting the "Clear All" action.
