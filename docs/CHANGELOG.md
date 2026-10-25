@@ -65,3 +65,18 @@ Format: ## YYYY-MM-DD — Phase N — title / Files changed / What was built / H
   - `npm test` passed (9 test files, 58 tests passed).
   - `npm run build` passed (production build in dist/).
   - Dev server tested for `/discover` responding 200 OK.
+
+## 2026-10-25 — Phase 4 — Home and Search
+- Files changed / created:
+  - Components: src/components/movie/MovieHero.tsx (featured trending backdrop, dual gradients, Ken-Burns zoom, meta info, CTAs, loading skeleton, and graceful fallback), src/components/movie/MovieRow.tsx (scroll-snap reel, keyboard focusable, md+ arrow navigation buttons, edge fades, hidden scrollbar, independent loading & error states), src/components/common/SearchBar.tsx (compact and large variants, role="search", clear button, form submission)
+  - Pages & Navigation: src/pages/Home.tsx (MovieHero, Trending / Popular / Top Rated independent rows, 8 genre shortcut chips with URL generator, and recent watchlist strip), src/pages/Search.tsx (400ms debounce, URL query synchronization with replace:true, minimum 2-character validation hint, aria-live status message, idle/loading/results/empty/error states, clamped pagination), src/components/layout/Header.tsx (wired active compact SearchBar navigating to /search?q=)
+  - Tests: src/components/common/SearchBar.test.tsx (5 tests), src/pages/Search.test.tsx (5 tests)
+- What was built:
+  - Complete cinematic Home experience with independent row loading, genre navigation, and personal watchlist preview.
+  - Fully debounced title search page strictly following rule 02 (400ms debounce, minimum 2 chars, URL synchronization, live screen reader announcements, zero unneeded network requests).
+- How verified:
+  - `npm run typecheck` passed (tsc --noEmit clean, 0 errors).
+  - `npm run lint` passed (eslint clean, 0 warnings, 0 errors).
+  - `npm test` passed (11 test files, 68 tests passed).
+  - `npm run build` passed (production bundle compiled cleanly in dist/).
+  - Vite dev server tested for Home (`/`) and Search (`/search?q=Dune`) responding 200 OK.

@@ -1,12 +1,22 @@
 import React, { useState } from 'react'
-import { Link, NavLink } from 'react-router-dom'
+import { Link, NavLink, useNavigate } from 'react-router-dom'
 import { Clapperboard, Search, Menu } from 'lucide-react'
 import { useWatchlist } from '../../context/WatchlistContext'
+import { SearchBar } from '../common/SearchBar'
 import { MobileNav } from './MobileNav'
 
 export const Header: React.FC = () => {
   const [isMobileNavOpen, setIsMobileNavOpen] = useState(false)
+  const [headerQuery, setHeaderQuery] = useState('')
+  const navigate = useNavigate()
   const { count } = useWatchlist()
+
+  const handleSearchSubmit = (q: string) => {
+    if (q.trim()) {
+      navigate(`/search?q=${encodeURIComponent(q.trim())}`)
+      setHeaderQuery('')
+    }
+  }
 
   return (
     <>
@@ -100,19 +110,16 @@ export const Header: React.FC = () => {
             </NavLink>
           </nav>
 
-          {/* Right actions: Search Trigger & Mobile Menu Toggle */}
+          {/* Right actions: Compact Search & Mobile Menu Toggle */}
           <div className="flex items-center gap-3">
-            <Link
-              to="/search"
-              aria-label="Search movies"
-              className="hidden sm:flex items-center gap-2.5 px-3.5 py-2 rounded-xl bg-[var(--surface-2)] border border-[var(--border)] text-xs text-[var(--text-muted)] hover:border-[var(--border-strong)] hover:text-white transition-all w-44 lg:w-56 focus-visible:outline-2 focus-visible:outline-[var(--primary)]"
-            >
-              <Search className="w-3.5 h-3.5 text-[var(--text-muted)] shrink-0" />
-              <span className="truncate">Search movies...</span>
-              <kbd className="ml-auto text-[10px] font-mono px-1.5 py-0.5 rounded bg-black/40 border border-white/10 text-[var(--text-muted)] shrink-0">
-                /
-              </kbd>
-            </Link>
+            <div className="hidden sm:block">
+              <SearchBar
+                value={headerQuery}
+                onChange={setHeaderQuery}
+                onSubmit={handleSearchSubmit}
+                variant="compact"
+              />
+            </div>
 
             <Link
               to="/search"

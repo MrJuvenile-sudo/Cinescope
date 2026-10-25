@@ -23,3 +23,8 @@ Format: ## YYYY-MM-DD — Title / Context / Decision / Consequence
 - Formatted `vote_average.gte` with `.toFixed(1)` to ensure query string outputs `7.0` matching the exact assignment specification.
 - Configured dynamic heading logic in `Discover.tsx` to display `{Year} {Genre} Films` (e.g. "2025 Comedy Films") or `{Genre} Cinema` when year is 'any'.
 - Added a discrete developer inspector bar visible only in `import.meta.env.DEV` showing the exact TMDB request parameters being dispatched.
+
+## 2026-10-25 — Phase 4 Home and Search Decisions
+- Integrated compact SearchBar into Header to enable direct search submission from any screen.
+- MovieRow implemented with native keyboard accessibility (`tabIndex={0}`) and custom CSS scrollbar suppression while preserving smooth swipe navigation.
+- Configured screen-reader live announcements on `Search.tsx` via `role="status"` and `aria-live="polite"` announcing `"{n} results found for {query}"`.
