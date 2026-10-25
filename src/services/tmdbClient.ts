@@ -100,7 +100,7 @@ export async function request<T>(
   if (!credential) {
     throw new TmdbError(
       'missing_credential',
-      'TMDB credential is missing. Please set VITE_TMDB_CREDENTIAL in .env.local.'
+      'TMDB credential is missing. Please set VITE_TMDB_API_KEY (or VITE_TMDB_CREDENTIAL) in .env.local.'
     )
   }
 
