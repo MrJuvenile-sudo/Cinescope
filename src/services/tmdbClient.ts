@@ -115,7 +115,10 @@ export async function request<T>(
   }
 
   // Construct URL and Query
-  const url = new URL(`${TMDB_BASE_URL}${endpoint}`)
+  const base = TMDB_BASE_URL.startsWith('/')
+    ? `${typeof window !== 'undefined' && window.location?.origin ? window.location.origin : 'https://api.themoviedb.org'}${TMDB_BASE_URL}`
+    : TMDB_BASE_URL
+  const url = new URL(`${base}${endpoint}`)
   const headers: Record<string, string> = {
     Accept: 'application/json',
   }
