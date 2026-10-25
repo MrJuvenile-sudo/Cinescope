@@ -13,3 +13,8 @@ Format: ## YYYY-MM-DD — Title / Context / Decision / Consequence
 - Used `@tailwindcss/vite` (Tailwind CSS v4) as the official current Vite plugin with CSS-first token configuration.
 - Enforced React 18 (`18.3.1`) compatibility across tooling and testing packages.
 - Implemented accessible mobile Sheet navigation with keyboard focus trapping and Escape key dismissal.
+
+## 2026-10-25 — Phase 2 Data Layer Decisions
+- Implemented functional state updates in `WatchlistContext` to prevent stale closure issues during rapid additions/removals.
+- Extracted `WATCHLIST_STORAGE_KEY` to `src/config/tmdb.ts` to cleanly satisfy React fast-refresh guidelines.
+- Created dedicated setup view in `ErrorState` for `missing_credential` to guide local `.env.local` configuration gracefully without crashing.

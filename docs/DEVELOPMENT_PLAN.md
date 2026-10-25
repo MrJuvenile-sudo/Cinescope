@@ -1,13 +1,13 @@
 # CineScope — Development Plan & Status
 Legend: [ ] todo | [~] in progress | [x] done. Update after EVERY task.
 
-## Current phase: Phase 2
-## Last completed task: Phase 1 — Scaffold & foundation (Vite app, Tailwind tokens, layout, routing, placeholder pages, smoke tests)
-## Next 3 tasks: types & tmdbClient (typed errors, cache, abort), movieService & hooks, WatchlistContext & unit tests
+## Current phase: Phase 3
+## Last completed task: Phase 2 — Data & state (types, tmdbClient, movieService, hooks, WatchlistContext, reusable feedback components, 45 unit tests)
+## Next 3 tasks: discoverUrlState (+tests), MovieCard & MovieGrid, FilterPanel & URL-synced Discover page
 
 - [x] Phase 0 — Bootstrap: AGENTS.md, .agents/rules, .agents/workflows, /docs
 - [x] Phase 1 — Scaffold & foundation: Vite React-TS app, Tailwind, Vitest, tokens/fonts/atmosphere, Button/Chip/SectionHeading, Layout/Header/MobileNav/Footer, all routes with premium placeholders, SPA rewrites, .env.example
-- [ ] Phase 2 — Data & state: types, tmdbClient (typed errors, cache, abort), movieService, imageUrl/movieHelpers, hooks, WatchlistContext + header badge, LoadingSkeleton/ErrorState/EmptyState/Rating/Pagination, unit tests
+- [x] Phase 2 — Data & state: types, tmdbClient (typed errors, cache, abort), movieService, imageUrl/movieHelpers, hooks, WatchlistContext + header badge, LoadingSkeleton/ErrorState/EmptyState/Rating/Pagination, unit tests
 - [ ] Phase 3 — Discover: discoverUrlState (+tests), MovieCard/MovieGrid, FilterPanel, URL-synced page with pagination and states, browser verification
 - [ ] Phase 4 — Home & Search: hero, rows, genre chips, watchlist strip; debounced Search + header SearchBar
 - [ ] Phase 5 — Details & Watchlist pages

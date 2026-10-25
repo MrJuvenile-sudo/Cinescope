@@ -1,14 +1,12 @@
 import React, { useState } from 'react'
 import { Link, NavLink } from 'react-router-dom'
 import { Clapperboard, Search, Menu } from 'lucide-react'
+import { useWatchlist } from '../../context/WatchlistContext'
 import { MobileNav } from './MobileNav'
 
-export interface HeaderProps {
-  watchlistCount?: number
-}
-
-export const Header: React.FC<HeaderProps> = ({ watchlistCount = 0 }) => {
+export const Header: React.FC = () => {
   const [isMobileNavOpen, setIsMobileNavOpen] = useState(false)
+  const { count } = useWatchlist()
 
   return (
     <>
@@ -86,16 +84,14 @@ export const Header: React.FC<HeaderProps> = ({ watchlistCount = 0 }) => {
               {({ isActive }) => (
                 <>
                   <span>Watchlist</span>
-                  <span
-                    className={`px-1.5 py-0.5 text-[11px] font-semibold rounded-full tabular-nums ${
-                      watchlistCount > 0
-                        ? 'bg-[var(--primary)] text-white shadow-[0_0_8px_rgba(229,9,20,0.4)]'
-                        : 'bg-[var(--surface-2)] text-[var(--text-muted)] border border-[var(--border)]'
-                    }`}
-                    aria-label={`Watchlist, ${watchlistCount} movies`}
-                  >
-                    {watchlistCount}
-                  </span>
+                  {count > 0 && (
+                    <span
+                      className="px-1.5 py-0.5 text-[11px] font-semibold rounded-full tabular-nums bg-[var(--primary)] text-white shadow-[0_0_8px_rgba(229,9,20,0.4)]"
+                      aria-label={`Watchlist, ${count} movies`}
+                    >
+                      {count}
+                    </span>
+                  )}
                   {isActive && (
                     <span className="absolute bottom-0 left-0 right-0 h-[2px] bg-[var(--primary)] rounded-full animate-in fade-in duration-200" />
                   )}
@@ -143,7 +139,7 @@ export const Header: React.FC<HeaderProps> = ({ watchlistCount = 0 }) => {
       <MobileNav
         isOpen={isMobileNavOpen}
         onClose={() => setIsMobileNavOpen(false)}
-        watchlistCount={watchlistCount}
+        watchlistCount={count}
       />
     </>
   )
