@@ -189,3 +189,23 @@ Format: ## YYYY-MM-DD — Phase N — title / Files changed / What was built / H
   - `npm run lint` passed (0 warnings/errors).
   - `npm test` passed (all 92 unit tests passing).
   - `npm run build` passed.
+
+## 2026-11-01 — Netlify Deployment Configuration, Resilient API Fallback & Verification
+- Files changed / created:
+  - `netlify.toml`: Added Netlify build and reverse proxy redirect configuration (`/tmdb-proxy/*` to `https://api.themoviedb.org/3/:splat`).
+  - `public/_redirects`: Updated with forced proxy rule `/tmdb-proxy/* https://api.themoviedb.org/3/:splat 200!` alongside SPA rewrite `/* /index.html 200`.
+  - `vercel.json`: Added `/tmdb-proxy/:match*` rewrite.
+  - `src/config/tmdb.ts`: Updated `TMDB_BASE_URL` to default to `/tmdb-proxy` for browser executions.
+  - `src/services/tmdbClient.ts`: Added automated fallback handling (if `/tmdb-proxy` returns 404/HTML or network failure, automatically falls back to direct TMDB API).
+  - `src/services/tmdbClient.test.ts`: Added unit tests verifying proxy 404/HTML and network failure fallbacks.
+  - `src/components/common/ErrorState.tsx`: Updated setup guidance to include step-by-step instructions for both local development and Netlify/Cloud deployment.
+  - `README.md`: Added dedicated "Deploying to Netlify" section and updated Vitest badge to 94 tests passed.
+- What was built:
+  - Netlify edge proxy configuration for seamless TMDB API access without CORS or ISP DNS poisoning.
+  - Transparent dual-layer API fallback in `tmdbClient.ts`.
+  - Step-by-step Netlify environment variable setup documentation.
+- How verified:
+  - `npm run typecheck` passed (0 errors).
+  - `npm run lint` passed (0 warnings, 0 errors).
+  - `npm test` passed (all 94 unit tests passing across 17 suites).
+  - `npm run build` passed and verified `dist/_redirects` contains proxy rule.

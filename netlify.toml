@@ -1,0 +1,19 @@
+# Netlify Configuration for CineScope
+
+[build]
+  command = "npm run build"
+  publish = "dist"
+
+# Forward /tmdb-proxy requests directly to TMDB API v3
+# Bypasses ISP DNS poisoning / blocks in regions like India (Jio/Airtel) and eliminates browser CORS restrictions
+[[redirects]]
+  from = "/tmdb-proxy/*"
+  to = "https://api.themoviedb.org/3/:splat"
+  status = 200
+  force = true
+
+# Single Page Application (SPA) client-side routing fallback
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200

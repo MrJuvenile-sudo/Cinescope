@@ -8,8 +8,7 @@ export const TMDB_API_KEY = (import.meta.env.VITE_TMDB_API_KEY || import.meta.en
 export const TMDB_CREDENTIAL = TMDB_API_KEY
 
 export const TMDB_BASE_URL = (
-  import.meta.env.VITE_TMDB_BASE_URL ||
-  (import.meta.env.DEV ? '/tmdb-proxy' : 'https://api.themoviedb.org/3')
+  import.meta.env.VITE_TMDB_BASE_URL || '/tmdb-proxy'
 ).replace(/\/$/, '')
 export const TMDB_IMAGE_BASE_URL = 'https://image.tmdb.org/t/p'
 export const CONTACT_EMAIL = 'hello@cinescope.movie'

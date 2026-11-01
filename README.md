@@ -4,7 +4,7 @@
 [![TypeScript](https://img.shields.io/badge/TypeScript-Strict-3178C6?logo=typescript&logoColor=white)](https://www.typescriptlang.org)
 [![Vite](https://img.shields.io/badge/Vite-6.4.5-646CFF?logo=vite&logoColor=white)](https://vitejs.dev)
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind-CSS_v4-38B2AC?logo=tailwind-css&logoColor=white)](https://tailwindcss.com)
-[![Vitest](https://img.shields.io/badge/Vitest-89_Passed-729B1B?logo=vitest&logoColor=white)](https://vitest.dev)
+[![Vitest](https://img.shields.io/badge/Vitest-94_Passed-729B1B?logo=vitest&logoColor=white)](https://vitest.dev)
 [![TMDB API](https://img.shields.io/badge/TMDB_API-v3_REST-01D277?logo=themoviedb&logoColor=white)](https://www.themoviedb.org)
 
 **CineScope** is an uncompromising, dark-mode movie discovery single-page application engineered with theatrical typography, warm near-black glass surfaces, and real-time integration with **The Movie Database (TMDB)**.
@@ -58,9 +58,33 @@ Open **[http://localhost:5001](http://localhost:5001)** (or Vite's assigned port
 ```bash
 npm run typecheck   # Strict TypeScript (tsc --noEmit)
 npm run lint        # ESLint analysis (0 errors, 0 warnings)
-npm test            # Run all 89 Vitest unit tests
+npm test            # Run all 94 Vitest unit tests
 npm run build       # Compile optimized production bundle to /dist
 ```
+
+---
+
+## Deploying to Netlify
+
+CineScope is production-ready for instantaneous one-click deployment on [Netlify](https://www.netlify.com/):
+
+### Configuration Details
+- **Build command:** `npm run build`
+- **Publish directory:** `dist`
+- **Configuration file:** `netlify.toml` (included in repository)
+
+### Steps to Deploy:
+1. Connect your GitHub repository (`https://github.com/MrJuvenile-sudo/Cinescope.git`) to Netlify.
+2. In the Netlify build settings, confirm:
+   - **Build command:** `npm run build`
+   - **Publish directory:** `dist`
+3. Navigate to **Site configuration** &rarr; **Environment variables** and add:
+   - **Key:** `VITE_TMDB_API_KEY` (or `VITE_TMDB_CREDENTIAL`)
+   - **Value:** your TMDB API Key (e.g. `b64717a4f4e871b21d86a12f769e2b7c`)
+4. Click **Deploy Site**.
+
+> **Note on TMDB Proxy & ISP Resilience:**  
+> The repository includes `netlify.toml` and `public/_redirects` which configure a high-performance edge proxy at `/tmdb-proxy/*` routing to `https://api.themoviedb.org/3/:splat`. This bypasses regional ISP DNS filtering (e.g. Reliance Jio/Airtel in India) and eliminates browser CORS restrictions. Furthermore, `tmdbClient.ts` includes an automatic fallback that seamlessly switches between the proxy and direct API endpoints if necessary.
 
 ---
 

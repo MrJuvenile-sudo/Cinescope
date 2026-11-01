@@ -54,19 +54,30 @@ export const ErrorState: React.FC<ErrorStateProps> = ({
         </div>
 
         {/* Step by step setup box */}
-        <div className="rounded-2xl bg-[var(--surface-2)] border border-[var(--border)] p-4 text-left space-y-2.5 text-xs text-[var(--text)] font-mono">
-          <p className="font-sans font-semibold text-white uppercase tracking-wider text-[11px]">
+        <div className="rounded-2xl bg-[var(--surface-2)] border border-[var(--border)] p-4 sm:p-5 text-left space-y-3 text-xs text-[var(--text)]">
+          <p className="font-semibold text-white uppercase tracking-wider text-[11px]">
             To connect TMDB:
           </p>
-          <ol className="list-decimal list-inside space-y-1.5 text-[var(--text-muted)] font-sans">
-            <li>
-              Create a <code className="text-[var(--gold)] font-mono">.env.local</code> file in the project root.
-            </li>
-            <li>
-              Add: <code className="text-white font-mono select-all">VITE_TMDB_CREDENTIAL=your_token_here</code>
-            </li>
-            <li>Restart your Vite development server or build process.</li>
-          </ol>
+          <div className="space-y-1.5 text-[var(--text-muted)]">
+            <p className="font-medium text-white">For Local Development:</p>
+            <ol className="list-decimal list-inside pl-1 space-y-1">
+              <li>
+                Create a <code className="text-[var(--gold)] font-mono">.env.local</code> file in the project root.
+              </li>
+              <li>
+                Add: <code className="text-white font-mono select-all">VITE_TMDB_API_KEY=your_api_key</code>
+              </li>
+              <li>Restart your development server.</li>
+            </ol>
+          </div>
+          <div className="space-y-1.5 text-[var(--text-muted)] pt-1 border-t border-[var(--border)]/60">
+            <p className="font-medium text-white">For Netlify / Cloud Deployment:</p>
+            <ol className="list-decimal list-inside pl-1 space-y-1">
+              <li>Open your Netlify site dashboard &rarr; <strong>Site configuration</strong> &rarr; <strong>Environment variables</strong>.</li>
+              <li>Add variable <code className="text-[var(--gold)] font-mono">VITE_TMDB_API_KEY</code> with your TMDB key.</li>
+              <li>Trigger a <strong>Deploy site</strong> to rebuild with the environment variable.</li>
+            </ol>
+          </div>
         </div>
 
         {onRetry && (

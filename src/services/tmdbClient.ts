@@ -116,7 +116,9 @@ export async function request<T>(
 
   // Construct URL and Query
   const base = TMDB_BASE_URL.startsWith('/')
-    ? `${typeof window !== 'undefined' && window.location?.origin ? window.location.origin : 'https://api.themoviedb.org'}${TMDB_BASE_URL}`
+    ? (typeof window !== 'undefined' && window.location?.origin
+        ? `${window.location.origin}${TMDB_BASE_URL}`
+        : 'https://api.themoviedb.org/3')
     : TMDB_BASE_URL
   const url = new URL(`${base}${endpoint}`)
   const headers: Record<string, string> = {
@@ -140,11 +142,46 @@ export async function request<T>(
   }
 
   try {
-    const response = await fetch(url.toString(), {
-      method: 'GET',
-      headers,
-      signal,
-    })
+    let response: Response
+    try {
+      response = await fetch(url.toString(), {
+        method: 'GET',
+        headers,
+        signal,
+      })
+    } catch (networkErr: unknown) {
+      if (
+        (networkErr instanceof DOMException && networkErr.name === 'AbortError') ||
+        (networkErr as { name?: string })?.name === 'AbortError'
+      ) {
+        throw networkErr
+      }
+
+      // If primary fetch to /tmdb-proxy failed with a network error, try direct TMDB fallback
+      if (base.includes('/tmdb-proxy')) {
+        const fallbackUrl = new URL(`https://api.themoviedb.org/3${endpoint}`)
+        url.searchParams.forEach((v, k) => fallbackUrl.searchParams.set(k, v))
+        response = await fetch(fallbackUrl.toString(), {
+          method: 'GET',
+          headers,
+          signal,
+        })
+      } else {
+        throw networkErr
+      }
+    }
+
+    // Check if proxy responded with HTML (e.g. host doesn't support proxy and fell through to index.html) or 404
+    const contentType = response.headers?.get ? (response.headers.get('content-type') || '') : ''
+    if (base.includes('/tmdb-proxy') && (response.status === 404 || contentType.includes('text/html'))) {
+      const fallbackUrl = new URL(`https://api.themoviedb.org/3${endpoint}`)
+      url.searchParams.forEach((v, k) => fallbackUrl.searchParams.set(k, v))
+      response = await fetch(fallbackUrl.toString(), {
+        method: 'GET',
+        headers,
+        signal,
+      })
+    }
 
     if (!response.ok) {
       throw mapError(response.status)

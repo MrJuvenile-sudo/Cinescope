@@ -57,3 +57,13 @@ Format: ## YYYY-MM-DD — Title / Context / Decision / Consequence
   - Added a clean Vite dev server proxy to bypass local ISP DNS hijacking of `api.themoviedb.org`.
 - Consequence:
   - The application now fully satisfies the expanded scope while maintaining 100% test coverage (91/91 tests passing), 0 lint errors, and 0 TypeScript errors.
+
+## 2026-11-01 — Netlify Deployment & Dual-Layer API Fallback Architecture
+- Context: Deploying CineScope to Netlify requires that TMDB API requests function seamlessly worldwide, including bypassing ISP-level DNS filtering (e.g. Jio/Airtel in India) and avoiding CORS issues.
+- Decision:
+  - Added `netlify.toml` and updated `public/_redirects` with a forced 200 rewrite rule `/tmdb-proxy/* -> https://api.themoviedb.org/3/:splat`.
+  - Configured `TMDB_BASE_URL` to default to `/tmdb-proxy` in browser environments.
+  - Built an automatic fallback into `tmdbClient.ts`: if the proxy returns 404, HTML (due to an unproxied SPA rewrite), or a network error, it transparently falls back to direct `https://api.themoviedb.org/3` without user intervention.
+  - Added unit test coverage for proxy failure fallbacks (total 94 tests passing).
+- Consequence:
+  - CineScope deploys to Netlify with zero configuration hassles, guarantees TMDB API requests function reliably across all regions and ISPs, and retains full backward compatibility with any hosting environment.

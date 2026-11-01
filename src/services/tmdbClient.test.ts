@@ -161,4 +161,48 @@ describe('tmdbClient', () => {
 
     await expect(request('/movie/popular')).rejects.toThrow('The user aborted a request.')
   })
+
+  it('falls back to direct TMDB endpoint when /tmdb-proxy returns 404 or HTML', async () => {
+    vi.spyOn(config, 'TMDB_CREDENTIAL', 'get').mockReturnValue('mock_key')
+    vi.spyOn(config, 'TMDB_BASE_URL', 'get').mockReturnValue('/tmdb-proxy')
+
+    const mockFetch = vi
+      .fn()
+      .mockResolvedValueOnce({
+        ok: false,
+        status: 404,
+        headers: new Headers({ 'content-type': 'text/html' }),
+      })
+      .mockResolvedValueOnce({
+        ok: true,
+        json: async () => ({ results: [{ id: 1, title: 'Inception' }] }),
+      })
+    global.fetch = mockFetch
+
+    const result = await request<{ results: Array<{ id: number; title: string }> }>('/movie/popular')
+    expect(result.results[0].title).toBe('Inception')
+    expect(mockFetch).toHaveBeenCalledTimes(2)
+    const secondCallUrl = mockFetch.mock.calls[1][0]
+    expect(secondCallUrl).toContain('https://api.themoviedb.org/3/movie/popular')
+  })
+
+  it('falls back to direct TMDB endpoint when /tmdb-proxy encounters network failure', async () => {
+    vi.spyOn(config, 'TMDB_CREDENTIAL', 'get').mockReturnValue('mock_key')
+    vi.spyOn(config, 'TMDB_BASE_URL', 'get').mockReturnValue('/tmdb-proxy')
+
+    const mockFetch = vi
+      .fn()
+      .mockRejectedValueOnce(new TypeError('Failed to fetch proxy'))
+      .mockResolvedValueOnce({
+        ok: true,
+        json: async () => ({ results: [{ id: 2, title: 'Interstellar' }] }),
+      })
+    global.fetch = mockFetch
+
+    const result = await request<{ results: Array<{ id: number; title: string }> }>('/movie/popular')
+    expect(result.results[0].title).toBe('Interstellar')
+    expect(mockFetch).toHaveBeenCalledTimes(2)
+    const secondCallUrl = mockFetch.mock.calls[1][0]
+    expect(secondCallUrl).toContain('https://api.themoviedb.org/3/movie/popular')
+  })
 })

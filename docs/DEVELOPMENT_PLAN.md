@@ -2,8 +2,8 @@
 Legend: [ ] todo | [~] in progress | [x] done. Update after EVERY task.
 
 ## Current phase: Complete / Production Ready
-## Last completed task: Phase 8 — Comprehensive Audit, Acceptance Checklist Verification, Production Readiness
-## Next 3 tasks: None — All 8 phases completed, 89 unit tests passing, production bundle built and verified
+## Last completed task: Netlify Deployment Configuration, Resilient API Fallback & Verification (94 unit tests passing)
+## Next 3 tasks: None — All phases completed, Netlify configuration active, production bundle built and verified
 
 - [x] Phase 0 — Bootstrap: AGENTS.md, .agents/rules, .agents/workflows, /docs
 - [x] Phase 1 — Scaffold & foundation: Vite React-TS app, Tailwind, Vitest, tokens/fonts/atmosphere, Button/Chip/SectionHeading, Layout/Header/MobileNav/Footer, all routes with premium placeholders, SPA rewrites, .env.example
